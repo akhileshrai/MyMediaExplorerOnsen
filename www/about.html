@@ -1,45 +1,30 @@
-<ons-navigator>
-    <ons-page ng-controller="AboutCtrl">
-        <ons-toolbar >
-            <div class="left">
-              <ons-toolbar-button ng-click="menu.toggle()">
-                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
-              </ons-toolbar-button>
-            </div>
-            <div class="right">
-              <ons-toolbar-button ng-click="console.log(navigator.getPages())">
-                <ons-icon icon="ion-gear-a" size="28px" fixed-width="false"></ons-icon>
-              </ons-toolbar-button>
-            </div>
-            <div class="center">CONFIDENTIAL</div>
-        </ons-toolbar>
+<ons-page class="center" ng-controller="AboutCtrl">
 
+    <ons-list>
+        <ons-list-item class="topcoat-list__item__line-height">
+            <ons-row>
+                <div class="col-20"><i class="fa fa-download fa-2x align"></i></div>
+                <div class="col"><a ng-click="linkTo('https://github.com/hollyschinsky/MediaExplorerMobile')" href="">Download</a> the Source</div>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item class="topcoat-list__item__line-height">
+            <ons-row>
+                <div class="col-20"><i class="fa fa-book fa-2x align"></i></div>
+                <div class="col">Read more about <a ng-click="linkTo('http://devgirl.org/2014/03/12/sample-phonegap-application-media-explorer-with-angularjsionic')" href="">this app</a>...</div>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item class="topcoat-list__item__line-height">
+            <ons-row>
+                <div class="col-20"><i class="fa fa-twitter fa-2x align"></i></div>
+                <div class="col">Follow me on <a ng-click="linkTo('http://twitter.com/devgirlfl')" href="">Twitter</a></div>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item class="topcoat-list__item__line-height">
+            <ons-row>
+                <div class="col-20"><i class="fa fa-file-text fa-2x align"></i></div>
+                <div class="col">Check out <a ng-click="linkTo('http://devgirl.org')" href="">My Blog</a></div>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
 
-
-    <body>
-        <ons-list style="margin-top: 100px;">
-            <ons-list-item>
-                <ons-row>
-                    
-                    <div class="col"><a ng-click="linkTo('https://github.com/hollyschinsky/MediaExplorerMobile')" href="">Download</a> the Source</div>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item>
-                <ons-row>
-                    <div class="col">Read more about <a ng-click="linkTo('http://devgirl.org/2014/03/12/sample-phonegap-application-media-explorer-with-angularjsionic')" href="">this app</a>...</div>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item>
-                <ons-row>
-                    <div class="col">Follow me on <a ng-click="linkTo('http://twitter.com/devgirlfl')" href="">Twitter</a></div>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item>
-                <ons-row>
-                    <div class="col">Check out <a ng-click="linkTo('http://devgirl.org')" href="">My Blog</a></div>
-                </ons-row>
-            </ons-list-item>
-        </ons-list>
-    </body>
 </ons-page>
-</ons-navigator>
