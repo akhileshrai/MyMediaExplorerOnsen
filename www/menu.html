@@ -1,36 +1,31 @@
-<ons-page id="menu">
+  <ons-page modifier="menu-page">
+   <ons-toolbar modifier="transparent"></ons-toolbar>
     <ons-list>
         <ons-list-item
-                class="topcoat-list__item--tappable topcoat-list__item__line-height"
                 ng-click="ons.slidingMenu.toggleMenu();
-			    ons.slidingMenu.setAbovePage('homeNav.html')">
+			    ons.slidingMenu.setMainPage('homeNav.html')">
             <i class="fa fa-home fa-lg" style="color: #666"></i>
             &nbsp; Home
         </ons-list-item>
 
         <ons-list-item
-                class="topcoat-list__item--tappable topcoat-list__item__line-height"
                 ng-click="ons.slidingMenu.toggleMenu();
-                ons.slidingMenu.setAbovePage('searchNav.html')">
+                ons.slidingMenu.setMainPage('login.html')">
             <i class="fa fa-search fa-lg" style="color: #666"></i>
-            &nbsp; Search
+            &nbsp; Login
         </ons-list-item>
 
 		<ons-list-item 
-                class="topcoat-list__item--tappable topcoat-list__item__line-height"
                 ng-click="ons.slidingMenu.toggleMenu();
-                ons.slidingMenu.setAbovePage('settingsNav.html')">
+                ons.slidingMenu.setMainPage('categories.html')">
 			<i class="fa fa-gear fa-lg" style="color: #666"></i>
-			&nbsp; Settings
+			&nbsp; CATEGORIES
 		</ons-list-item>
 
         <ons-list-item
-                class="topcoat-list__item--tappable topcoat-list__item__line-height"
-                ng-click="ons.slidingMenu.toggleMenu();
-			ons.slidingMenu.setAbovePage('aboutNav.html')">
+                ng-click="ons.slidingMenu.setMainPage('about.html'); ons.slidingMenu.toggleMenu();">
             <i class="fa fa-info-circle fa-lg" style="color: #666"></i>
             &nbsp; About
         </ons-list-item>
 	</ons-list>
-
-</ons-page>
+  </ons-page>

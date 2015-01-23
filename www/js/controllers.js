@@ -107,6 +107,8 @@ mediaApp.controller('PlayMediaCtrl', function ($scope,SettingsService) {
         }
 })
 
+
+
 mediaApp.controller('SortCtrl', function ($scope,SettingsService,$rootScope) {
         $scope.filterTerm = "";
 
@@ -124,5 +126,184 @@ mediaApp.controller('SortCtrl', function ($scope,SettingsService,$rootScope) {
             $scope.ons.screen.dismissPage();
         }
 })
+
+Parse.initialize("ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire", "xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous");
+console.log('Parse and FB have been inidialised!');
+
+
+mediaApp.controller('Categories', function ($scope) {
+        console.log("Got to this Category controller");
+        $scope.resultQuery = 'HI';
+        //$scope. = SettingsService.get('kind');
+        $scope.options = {};
+
+        
+        var Category = Parse.Object.extend("Interests");
+        var query = new Parse.Query(Category);
+        
+        //query.equalTo('Category', 'Sports');
+        query.find({
+            success: function(results){
+                $scope.resultQuery = 'Results length:'+results.length;
+                $scope.interests = results;
+                var categcount = -1;
+                var categ = '';
+                var options = [];
+                var interest_array= [];
+                var check='checked';
+                var menu = {id:0, title:[], interests:[], toggle:''};
+                for (var  i=0; i<results.length; i++) {
+                    //header = interest.get('Category');
+                    //console.log (results[i].attributes);
+
+                    //console.log(menu, categcount)
+                    if (categ!= results[i].attributes.Category){
+                        menu = {id:0, title:[], interests:[], toggle:''};
+                        
+                        //START NEW CATEGORY
+                        interest_array= [];
+                        menu.title.push(results[i].attributes.Category)
+                        categcount+=1;
+                        categ= results[i].attributes.Category;
+
+                        //console.log(categ);
+                        //options[i]['Interests'].push(results[i].attributes.Interest);
+                    }
+                    interest_array.push({name:results[i].attributes.Interest, checked:check})
+                    //menu.interests.checked=categcount%2;
+                    menu.interests[0] =(interest_array);
+                    menu.id = (results[i].attributes.Id);
+                    menu.toggle = false;
+                    check='';
+                    
+                                        console.log(menu)
+
+                    options[categcount] = menu;
+
+                    
+                    /*while (header!=interest["Category"]) {
+                        console.log('header inside');                        
+                    }*/
+                }
+                console.log(options);
+                $scope.options = options;
+                
+                $scope.$apply();
+            },
+            error: function(error){
+                alert("The shit errored out"+error.code+error.message)
+            }
+        })
+
+})
+/*mediaApp.run(['$rootScope', function($scope) {
+    console.log('Running this!')
+  $scope.scenario = 'Sign up';
+  $scope.currentUser = Parse.User.current();
+  
+  $scope.signUp = function(form) {
+    var user = new Parse.User();
+    user.set("email", form.email);
+    user.set("username", form.username);
+    user.set("password", form.password);
+    
+    user.signUp(null, {
+      success: function(user) {
+        $scope.currentUser = user;
+        $scope.$apply();
+      },
+      error: function(user, error) {
+        alert("Unable to sign up:  " + error.code + " " + error.message);
+      }
+    });    
+  };
+  
+  $scope.logIn = function(form) {
+    Parse.User.logIn(form.username, form.password, {
+      success: function(user) {
+        $scope.currentUser = user;
+        $scope.$apply();
+      },
+      error: function(user, error) {
+        alert("Unable to log in: " + error.code + " " + error.message);
+      }
+    });
+  };
+  
+  $scope.fblogin= function(){
+       console.log('got to fb login');
+        window.fbAsyncInit = function() {
+        Parse.FacebookUtils.init({
+          appId      : '353205054847621',
+          xfbml      : true,
+          version    : 'v2.1'
+        });
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+       
+        }
+       
+       
+        Parse.FacebookUtils.logIn(null, {
+          success: function(user) {
+            if (!user.existed()) {
+              alert("User signed up and logged in through Facebook!");
+            } else {
+              alert("User logged in through Facebook!");
+            }
+          },
+          error: function(user, error) {
+            alert("User cancelled the Facebook login or did not fully authorize.");
+          }
+        });
+      };
+
+  
+  $scope.logOut = function(form) {
+    Parse.User.logOut();
+    $scope.currentUser = null;
+  };
+}]);
+*/
+
+mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseService) {
+  // Perform user login using back-end service
+  console.log('got to login control!')
+    
+    $scope.login = function() {
+		ParseService.login($scope.login_username, $scope.login_password, function(user) {
+      // When service call is finished, navigate to items page
+      //$location.path('/items');
+    });
+	}
+
+  // Perform user signup using back-end service
+	$scope.signUp = function() {
+		ParseService.signUp($scope.signup_username, $scope.signup_password, function(user) {
+      // When service call is finished, navigate to items page
+      //$location.path('/items');
+    });
+	}
+
+  // Perform user login using Facebook API
+  $scope.FB_login = function() {
+    ParseService.FB_login(function(user) {
+      // When service call is finished, navigate to items page
+      //$location.path('/items');
+    });
+  }
+});
+LoginCtrl.$inject = ['$scope', '$location', 'ParseService']
+
+/**
+ * Main controller for the app
+ */
+
 
 

@@ -1,0 +1,36 @@
+<ons-navigator>
+    <ons-page ng-controller="Categories">
+        <ons-toolbar >
+            <div class="left">
+              <ons-toolbar-button ng-click="menu.toggle()">
+                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+              </ons-toolbar-button>
+            </div>
+            <div class="right">
+              <ons-toolbar-button ng-click="console.log(navigator.getPages())">
+                <ons-icon icon="ion-gear-a" size="28px" fixed-width="false"></ons-icon>
+              </ons-toolbar-button>
+            </div>
+            <div class="center">CATEGORIES</div>
+        </ons-toolbar>
+
+
+
+    <body>
+        <ons-list style="margin-top: 0px;">
+            <ons-list-item ng-repeat="categ in options" >
+                <!--<ons-list-header ng-if="header!=interest.get('Category')">{{header = interest.get('Category')}}</ons-list-header>-->
+                <ons-row>
+                    <ons-list style="margin-top: 0px;">
+                        <ons-list-title class="col">{{categ.title[0]}}</ons-list-title>
+                        <ons-list-item ng-repeat="interest in categ.interests[0]" >
+                            <span style="color: #666">{{interest.checked}}</span>
+                            <ons-switch modifier="list-item" checked="{{interest.checked}}" var="{{interest.name}}"></ons-switch>
+                        </ons-list-item>
+                    </ons-list>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+    </body>
+</ons-page>
+</ons-navigator>
