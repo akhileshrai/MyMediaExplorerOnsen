@@ -1,0 +1,73 @@
+<ons-navigator>
+    <ons-page ng-controller="LoginCtrler">
+        <ons-toolbar >
+            <div class="left">
+              <ons-toolbar-button ng-click="menu.toggle()">
+                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+              </ons-toolbar-button>
+            </div>
+            <div class="right">
+              <ons-toolbar-button ng-click="console.log(navigator.getPages())">
+                <ons-icon icon="ion-gear-a" size="28px" fixed-width="false"></ons-icon>
+              </ons-toolbar-button>
+            </div>
+            <div class="center">Login</div>
+        </ons-toolbar>
+
+
+  <div id="fb-root"></div>
+
+<body>
+
+<!--
+  <div ng-hide="currentUser">
+    <form ng-show="scenario == 'Sign up'">
+      <h2>Sign up</h2>
+      Email: <input type="email" ng-model="user.email" /><br />
+      Username: <input type="text" ng-model="user.username" /><br />
+      Password: <input type="password" ng-model="user.password" /><br />
+      <button ng-click="signUp(user)">Sign up</button>
+      or <a href="#" ng-click='scenario="Log in"'>Log in</a>
+    </form>
+    
+    <form ng-show="scenario == 'Log in'">
+      <h2>Log in</h2>
+      Username: <input type="text" ng-model="user.username" /><br />
+      Password: <input type="password" ng-model="user.password" /><br />
+      <button ng-click="logIn(user)">Log in</button>
+      or <a href="#" ng-click='scenario="Sign up"'>Sign up</a>
+    </form>
+    <form ng-show="scenario == 'Sign up'">
+      <h2>FB Log in</h2>
+      Username: <input type="text" ng-model="user.username" /><br />
+      Password: <input type="password" ng-model="user.password" /><br />
+      <button ng-click="fblogin()">Log in</button>
+      <fb:login-button show-faces="true" max-rows="1"     size="large"></fb:login-button>
+    </form>
+  </div>
+  
+  <div ng-show="currentUser">
+    <h1>Welcome {{currentUser.get('username')}}</h1>
+    <p> You have been successfully logged in</p>
+    <button ng-click="logOut(user)">Log out</button>
+  </div>-->
+  
+        <div>
+          <form class="login_form">
+            <h2>Log In</h2>
+            Username </br><input type="text" ng-model="login_username"/></br>
+            Password </br><input type="password" ng-model="login_password"/></br>
+            <button class='btn' ng-click="login()" ng-model="login_btn">Log In</button>
+          </form>
+          <form class="signup_form">
+            <h2>Sign Up</h2>
+            Username </br><input type="text" ng-model="signup_username"/></br>
+            Create a Password </br><input type="password" ng-model="signup_password"/></br>
+            <button class='btn' ng-click="signUp()" ng-model="signup_btn">Sign Up</button>
+          </form>
+          </br>
+          <button class='btn' ng-click="FB_login()">Connect with Facebook</button>
+        </div>
+</body>
+</ons-page>
+</ons-navigator>
