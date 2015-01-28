@@ -293,10 +293,20 @@ mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseSe
 
   // Perform user login using Facebook API
   $scope.FB_login = function() {
-    ParseService.FB_login(function(user) {
-      // When service call is finished, navigate to items page
-      //$location.path('/items');
-    });
+  	
+
+	    /*ParseService.FB_login(function(user) {
+	      // When service call is finished, navigate to items page
+	      //$location.path('/items');
+	    });*/
+	    var fbLoginSuccess = function (userData) {
+		    alert("UserInfo: " + JSON.stringify(userData));
+		};
+		
+		facebookConnectPlugin.login(["public_profile"],
+		    fbLoginSuccess,
+		    function (error) { alert("" + error) }
+		);
   }
 });
 LoginCtrler.$inject = ['$scope', '$location', 'ParseService']
