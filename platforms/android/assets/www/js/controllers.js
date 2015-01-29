@@ -274,8 +274,13 @@ mediaApp.controller('Categories', function ($scope) {
 
 mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseService) {
   // Perform user login using back-end service
-  console.log('got to login control!')
-    
+        console.log (window);
+        if (!window.cordova) {
+			console.log("inititiate browser for fb plugin")
+		    //facebookConnectPlugin.browserInit("353205054847621", "v2.0");
+		    // version is optional. It refers to the version of API you may want to use.
+		}
+		    
     $scope.login = function() {
 		ParseService.login($scope.login_username, $scope.login_password, function(user) {
       // When service call is finished, navigate to items page
@@ -293,13 +298,60 @@ mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseSe
 
   // Perform user login using Facebook API
   $scope.FB_login = function() {
-    ParseService.FB_login(function(user) {
-      // When service call is finished, navigate to items page
-      //$location.path('/items');
-    });
-  }
+  		    /*ParseService.FB_login(function(user) {
+	      // When service call is finished, navigate to items page
+	      //$location.path('/items');
+	    });*/
+	    var facebookAuthData2 = '';
+	    var fbLoginSuccess = function (userData) {
+		    //alert("UserInfo: " + JSON.stringify(userData));
+		var fbData = JSON.stringify(userData);
+				
+		/*var facebookAuthData = {
+				"id": fbData.authResponse+"",
+				"access_token": fbData.authResponse["accessToken"]			};
+		console.log(userData);*/
+		var expDate = new Date(
+            new Date().getTime() + userData.authResponse.expiresIn * 1000
+        ).toISOString();
+		facebookAuthData2 = {
+				"id": userData.authResponse.userID+"",
+				"access_token": userData.authResponse["accessToken"],
+				"expiration_date": expDate
+				//"expiration_date": userData.authResponse["expirationDate"].slice(0, -1).replace("+", ".")+"Z"
+							};
+		};
+		
+		alert(facebookAuthData2);
+
+		Parse.FacebookUtils.logIn(facebookAuthData2, {
+          success: function(user) {
+            if (!user.existed()) {
+              alert("User signed up and logged in through Facebook!");
+            } else {
+              alert("User logged in through Facebook!");
+                    		console.log(user);
+                    		FB.api('/me', function(response) {
+    alert("Name: "+ response.name + "\nFirst name: "+ response.first_name + "ID: "+response.id);
+    var img_link = "http://graph.facebook.com/"+response.id+"/picture"
 });
-LoginCtrler.$inject = ['$scope', '$location', 'ParseService']
+
+            }
+            //loggedInUser = user;
+            
+            callback(user);
+          },
+          error: function(user, error) {
+            alert("User cancelled the Facebook login or did not fully authorize.");
+          }
+        });
+				
+
+
+		facebookConnectPlugin.login(["public_profile"],fbLoginSuccess, function (error) { alert("hi" + error); });
+  };
+});
+//LoginCtrler.$inject = ['$scope', '$location', 'ParseService']
 
 /**
  * Main controller for the app

@@ -20,6 +20,8 @@ var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
+            console.log("BOOTING UP");
+
     },
     // Bind Event Listeners
     //
@@ -45,5 +47,13 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+        
+        
+        console.log ("Initialiing plugin");
+        /*if (window.cordova.platformId == "browser") {
+			console.log("inititiate browser for fb plugin")
+		    facebookConnectPlugin.browserInit("353205054847621", "v2.0");
+		    // version is optional. It refers to the version of API you may want to use.
+		}*/
     }
 };

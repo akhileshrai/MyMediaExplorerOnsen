@@ -286,6 +286,7 @@ C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\asset
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\app.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\controllers.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\directives.js \
+C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\facebookConnectPlugin.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\filters.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\index.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\initservices.js \

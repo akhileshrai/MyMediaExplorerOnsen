@@ -16,8 +16,11 @@
 
     <license>Apache 2.0</license>
 
-    <preference name="APP_ID" />
-    <preference name="APP_NAME" />
+    <!--<preference name="APP_ID" />
+    <preference name="APP_NAME" />-->
+    
+    <param name="APP_ID" value="353205054847621" />
+	<param name="APP_NAME" value="test" /> 
 
     <engines>
         <!-- Requires > 3.3.* because of the custom Framework tag for iOS [CB-5238] -->
