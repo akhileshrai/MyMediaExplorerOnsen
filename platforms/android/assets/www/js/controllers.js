@@ -308,7 +308,7 @@ mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseSe
 	    var fbLoginSuccess = function (userData) {
 		    //alert("UserInfo: " + JSON.stringify(userData));
 			var fbData = JSON.stringify(userData);
-		    alert("hi");
+		    alert("hey"+JSON.stringify(userData));
 
 			/*var facebookAuthData = {
 					"id": fbData.authResponse+"",
@@ -323,7 +323,7 @@ mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseSe
 					"expiration_date": expDate
 					//"expiration_date": userData.authResponse["expirationDate"].slice(0, -1).replace("+", ".")+"Z"
 			};
-			//alert(fbData);
+			alert(fbData);
 		};
 		
 
@@ -351,7 +351,7 @@ mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseSe
 				
 */
 
-		facebookConnectPlugin.login(["public_profile"],fbLoginSuccess, function (error) { alert("hi" + error); });
+		facebookConnectPlugin.login(["public_profile"],fbLoginSuccess, function (error) { alert("hi error" + error); });
   };
 });
 LoginCtrler.$inject = ['$scope', '$location', 'ParseService']
