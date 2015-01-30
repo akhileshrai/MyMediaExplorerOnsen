@@ -273,6 +273,8 @@ mediaApp.controller('Categories', function ($scope) {
 */
 
 mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseService) {
+
+/*
   // Perform user login using back-end service
         console.log (window);
         if (!window.cordova) {
@@ -295,7 +297,7 @@ mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseSe
       //$location.path('/items');
     });
 	}
-
+*/
   // Perform user login using Facebook API
   $scope.FB_login = function() {
   		    /*ParseService.FB_login(function(user) {
@@ -305,26 +307,27 @@ mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseSe
 	    var facebookAuthData2 = '';
 	    var fbLoginSuccess = function (userData) {
 		    //alert("UserInfo: " + JSON.stringify(userData));
-		var fbData = JSON.stringify(userData);
-				
-		/*var facebookAuthData = {
-				"id": fbData.authResponse+"",
-				"access_token": fbData.authResponse["accessToken"]			};
-		console.log(userData);*/
-		var expDate = new Date(
-            new Date().getTime() + userData.authResponse.expiresIn * 1000
-        ).toISOString();
-		facebookAuthData2 = {
-				"id": userData.authResponse.userID+"",
-				"access_token": userData.authResponse["accessToken"],
-				"expiration_date": expDate
-				//"expiration_date": userData.authResponse["expirationDate"].slice(0, -1).replace("+", ".")+"Z"
-							};
+			var fbData = JSON.stringify(userData);
+		    alert("hi");
+
+			/*var facebookAuthData = {
+					"id": fbData.authResponse+"",
+					"access_token": fbData.authResponse["accessToken"]			};
+			console.log(userData);*/
+			var expDate = new Date(
+	            new Date().getTime() + userData.authResponse.expiresIn * 1000
+	        ).toISOString();
+			facebookAuthData2 = {
+					"id": userData.authResponse.userID+"",
+					"access_token": userData.authResponse["accessToken"],
+					"expiration_date": expDate
+					//"expiration_date": userData.authResponse["expirationDate"].slice(0, -1).replace("+", ".")+"Z"
+			};
+			//alert(fbData);
 		};
 		
-		alert(facebookAuthData2);
 
-		Parse.FacebookUtils.logIn(facebookAuthData2, {
+		/*Parse.FacebookUtils.logIn(facebookAuthData2, {
           success: function(user) {
             if (!user.existed()) {
               alert("User signed up and logged in through Facebook!");
@@ -346,16 +349,83 @@ mediaApp.controller('LoginCtrler', function LoginCtrl($scope, $location, ParseSe
           }
         });
 				
-
+*/
 
 		facebookConnectPlugin.login(["public_profile"],fbLoginSuccess, function (error) { alert("hi" + error); });
   };
 });
-//LoginCtrler.$inject = ['$scope', '$location', 'ParseService']
+LoginCtrler.$inject = ['$scope', '$location', 'ParseService']
 
 /**
  * Main controller for the app
  */
 
+
+mediaApp.controller('loginCtrl', ['$scope', function($scope, $state) {
+    var fbLogged = new Parse.Promise();
+
+    var fbLoginSuccess = function(response) {
+        if (!response.authResponse){
+            fbLoginError("Cannot find the authResponse");
+            return;
+        }
+        var expDate = new Date(
+            new Date().getTime() + response.authResponse.expiresIn * 1000
+        ).toISOString();
+
+        var authData = {
+            id: String(response.authResponse.userID),
+            access_token: response.authResponse.accessToken,
+            expiration_date: expDate
+        }
+        fbLogged.resolve(authData);
+        fbLoginSuccess = null;
+        console.log(response);
+    };
+
+    var fbLoginError = function(error){
+        fbLogged.reject(error);
+    };
+
+    $scope.login = function() {
+        console.log('Login');
+        if (!window.cordova) {
+            facebookConnectPlugin.browserInit('353205054847621');
+        }
+        facebookConnectPlugin.login(['email'], fbLoginSuccess, fbLoginError);
+
+        fbLogged.then( function(authData) {
+            console.log('Promised');
+            return Parse.FacebookUtils.logIn(authData);
+        })
+        .then( function(userObject) {
+            var authData = userObject.get('authData');
+            facebookConnectPlugin.api('/me', null, 
+                function(response) {
+                    console.log(response);
+                    userObject.set('name', response.name);
+                    userObject.set('email', response.email);
+                    userObject.save();
+                },
+                function(error) {
+                    console.log(error);
+                }
+            );
+            facebookConnectPlugin.api('/me/picture', null,
+                function(response) {
+                    userObject.set('profilePicture', response.data.url);
+                    userObject.save();
+                }, 
+                function(error) {
+                    console.log(error);
+                }
+            );
+            //$state.go('home');
+            console.log('go home');
+        }, function(error) {
+            console.log(error);
+        });
+    };
+}])
 
 
