@@ -203,7 +203,7 @@ mediaApp.controller('Categories', function($scope) {
 			$scope.$apply();
 		},
 		error : function(error) {
-			alert("The shit errored out" + error.code + error.message)
+			alert("Network seems offside :/" + error.code + error.message)
 		}
 	})
 
@@ -415,7 +415,7 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 		}).then(function(userObject) {
 			var authData = userObject.get('authData');
 			facebookConnectPlugin.api('/me', null, function(response) {
-				console.log('step1')
+				console.log('step1');
 				console.log(response.name);
 				console.log(Parse.User.current());
 				console.log(user.attributes.profilePicture);
@@ -433,7 +433,7 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 				userObject.set('profilePicture', response.data.url);
 				userObject.save();
 				console.log(userObject);
-				console.log('step2')
+				console.log('step2');
 				console.log(Parse.User.current());
 				$scope.profilePic = response.data.url;
 				
