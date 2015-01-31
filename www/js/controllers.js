@@ -363,18 +363,24 @@ mediaApp.controller('LoginCtrler', function LoginCtrler($scope, $location, Parse
 		});
 	};
 })
-LoginCtrler.$inject = ['$scope', '$location', 'ParseService']
+//LoginCtrler.$inject = ['$scope', '$location', 'ParseService']
 
 /**
  * Main controller for the app
  */
 
 
-mediaApp.controller('LoginCtrler', function LoginCtrler($scope, $location, ParseService) {
+//mediaApp.controller('LoginCtrler', function LoginCtrler($scope, $location, ParseService) {
 
 mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
+	console.log('hi ctrl');
 	var fbLogged = new Parse.Promise();
-
+	if (!$scope.user) {
+		$scope.user = Parse.User.current();
+	
+	
+	}
+	
 	var fbLoginSuccess = function(response) {
 		if (!response.authResponse) {
 			fbLoginError("Cannot find the authResponse");
@@ -396,7 +402,7 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 		fbLogged.reject(error);
 	};
 
-	$scope.login = function() {
+	$scope.FB_login = function() {
 		console.log('Login');
 		if (!window.cordova) {
 			facebookConnectPlugin.browserInit('353205054847621');
@@ -409,16 +415,30 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 		}).then(function(userObject) {
 			var authData = userObject.get('authData');
 			facebookConnectPlugin.api('/me', null, function(response) {
-				console.log(response);
+				console.log('step1')
+				console.log(response.name);
+				console.log(Parse.User.current());
+				console.log(user.attributes.profilePicture);
+
 				userObject.set('name', response.name);
 				userObject.set('email', response.email);
 				userObject.save();
+				$scope.user = user;
+				$scope.$apply();
+				
 			}, function(error) {
 				console.log(error);
 			});
 			facebookConnectPlugin.api('/me/picture', null, function(response) {
 				userObject.set('profilePicture', response.data.url);
 				userObject.save();
+				console.log(userObject);
+				console.log('step2')
+				console.log(Parse.User.current());
+				$scope.profilePic = response.data.url;
+				
+
+				
 			}, function(error) {
 				console.log(error);
 			});
@@ -427,6 +447,16 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 		}, function(error) {
 			console.log(error);
 		});
+		
+		//console.log(userObject);
+		console.log(Parse.User.current());
+	
 	};
-})
+	$scope.logout = function() {
+          console.log('Logout');
+          Parse.User.logOut();
+          $state.go('login');
+    };
+
+});
 
