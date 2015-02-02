@@ -1,5 +1,5 @@
 // This is a JavaScript file
-      window.fbAsyncInit = function() {
+window.fbAsyncInit = function() {
         Parse.FacebookUtils.init({
           appId      : '353205054847621',
           xfbml      : true,
@@ -13,21 +13,7 @@
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
-//OUTIGO CONTROLLERS
-
-function login()
-{
-        Parse.FacebookUtils.logIn(null, {
-          success: function(user) {
-            if (!user.existed()) {
-              alert("User signed up and logged in through Facebook!");
-            } else {
-              alert("User logged in through Facebook!");
-            }
-          },
-          error: function(user, error) {
-            alert("User cancelled the Facebook login or did not fully authorize.");
-          }
-        });
-      };
  };
+
+
+Parse.initialize("ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire", "xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous");
