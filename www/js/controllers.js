@@ -133,13 +133,17 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 mediaApp.controller('Categories', function($scope, ParseUser) {
  
 	
-	//console.log("controller user:");
-	console.log(ParseUser.loggedInCheck());
-	//console.log(ParseUser;)
-	if (!ParseUser.loggedInCheck()){
+	console.log("controller user:");
+	var loggedIn = ParseUser.loggedInCheck();
+	$scope.loggedIn = loggedIn;
+	//console.log(ParseUser);
+	console.log(loggedIn);
+
+	if (!loggedIn){
+		console.log('got here but didnt do shit');
 		//Send to login page
 		setTimeout(function() {
-            navOut.pushPage('categories.html');    
+            navOut.pushPage('login.html');    
         }, 1000);
 	}
 	
@@ -252,6 +256,7 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 
 	$scope.FB_login = function() {
 		console.log('Login');
+		console.log(navOut.getPages());
 		if (!window.cordova) {
 			//facebookConnectPlugin.browserInit('353205054847621');
 		}
@@ -278,7 +283,11 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 				$scope.$apply();
 			}, function(error) {console.log(error);}
 			);
-			console.log('go home');
+			setTimeout(function() {
+				//navOut.pushPage('categories.html');   
+				navOut.popPage(); 
+			}, 1000);
+
 		}, function(error) {
 			console.log(error);
 		});

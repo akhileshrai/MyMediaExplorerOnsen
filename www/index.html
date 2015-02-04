@@ -38,7 +38,9 @@
 
   <div id="fb-root"></div>
 
-  <script>
+
+  <script src="js/facebookConnectPlugin.js"></script>
+    <script>
 
 
     // Load the SDK's source Asynchronously
@@ -52,13 +54,17 @@
     
     
   </script>
-  <script src="js/facebookConnectPlugin.js"></script>
+    <ons-navigator var="navOut" >
 
+  	</ons-navigator> 
 
-    <ons-sliding-menu
-        menu-page="menu.html" main-page="homeNav.html" side="left"
-    	var="menu" type="overlay" max-slide-distance="260px" swipable="true">
-  	</ons-sliding-menu>
+  	<ons-page>
+		<ons-sliding-menu
+		    menu-page="menu.html" main-page="homeNav.html" side="left"
+			var="menu" type="overlay" max-slide-distance="260px" swipable="true">
+		</ons-sliding-menu>
+  	</ons-page>
+
   	
 
 </body>

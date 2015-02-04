@@ -23,3 +23,7 @@ mediaApp.config(function($stateProvider, $urlRouterProvider) {
         });
         
 });
+
+mediaApp.run(function() {
+	console.log('running');
+});
