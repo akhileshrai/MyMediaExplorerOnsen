@@ -141,7 +141,7 @@ mediaApp.factory('ParseService', function($resource){
                 },
                 error: function(error) {
                   alert("Error: " + error.message);
-                }
+                }	
               });
             },
             error: function(error) {
@@ -239,6 +239,21 @@ mediaApp.factory('ParseService', function($resource){
 
     // The factory function returns ParseService, which is injected into controllers.
     return ParseService;
+});
+
+mediaApp.factory('ParseUser', function($resource){
+
+    return {
+    	loggedInCheck : function loggedInCheck() {
+    		
+			var loggedIn = false;
+			if(Parse.User.current()) {
+		        loggedIn = true
+		    }
+	        return loggedIn;
+    	}
+    };
+ 
 });
 
 

@@ -15,8 +15,11 @@ mediaApp.config(function($stateProvider, $urlRouterProvider) {
         })
         
         // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-        .state('about', {
-            // we'll get to this in a bit       
+        .state('login', {
+            // we'll get to this in a bit  
+            url: '/login',
+            templateUrl: 'login.html'
+     
         });
         
 });

@@ -130,8 +130,21 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 })
 
 
-mediaApp.controller('Categories', function($scope) {
-	console.log("Got to this Category controller");
+mediaApp.controller('Categories', function($scope, ParseUser) {
+ 
+	
+	//console.log("controller user:");
+	console.log(ParseUser.loggedInCheck());
+	//console.log(ParseUser;)
+	if (!ParseUser.loggedInCheck()){
+		//Send to login page
+		setTimeout(function() {
+            navOut.pushPage('categories.html');    
+        }, 1000);
+	}
+	
+	
+	//console.log("Got to this Category controller");
 	$scope.resultQuery = 'HI';
 	//$scope. = SettingsService.get('kind');
 	$scope.options = {};
