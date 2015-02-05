@@ -132,19 +132,21 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 
 mediaApp.controller('Categories', function($scope, ParseUser) {
  
-	
+
 	console.log("controller user:");
 	var loggedIn = ParseUser.loggedInCheck();
 	$scope.loggedIn = loggedIn;
 	//console.log(ParseUser);
 	console.log(loggedIn);
 
-	if (!loggedIn){
+	if (loggedIn){
 		console.log('got here but didnt do shit');
 		//Send to login page
-		setTimeout(function() {
-            navOut.pushPage('login.html');    
-        }, 1000);
+		ons.slidingMenu.setMainPage('login.html')
+
+		/*setTimeout(function() {
+            //navOut.pushPage('login.html');    
+        }, 1000);*/
 	}
 	
 	
@@ -285,7 +287,11 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 			);
 			setTimeout(function() {
 				//navOut.pushPage('categories.html');   
-				navOut.popPage(); 
+				//navOut.resetToPage('categories.html');
+				//navOut.insertPage(-1,'categories.html');
+				ons.slidingMenu.setMainPage('categories.html')
+
+				console.log(navOut.getPages());
 			}, 1000);
 
 		}, function(error) {

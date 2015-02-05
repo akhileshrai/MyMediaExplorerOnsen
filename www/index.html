@@ -54,16 +54,15 @@
     
     
   </script>
-    <ons-navigator var="navOut" >
+  <ons-navigator var="navOut" >
+	  	<ons-page>
+			<ons-sliding-menu
+			    menu-page="menu.html" main-page="homeNav.html" side="left"
+				var="menu" type="overlay" max-slide-distance="260px" swipable="true">
+			</ons-sliding-menu>
+	  	</ons-page>
+  </ons-navigator> 
 
-  	</ons-navigator> 
-
-  	<ons-page>
-		<ons-sliding-menu
-		    menu-page="menu.html" main-page="homeNav.html" side="left"
-			var="menu" type="overlay" max-slide-distance="260px" swipable="true">
-		</ons-sliding-menu>
-  	</ons-page>
 
   	
 

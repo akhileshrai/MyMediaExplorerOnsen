@@ -1,12 +1,11 @@
-    <ons-navigator var="navOut" >
 
-  	</ons-navigator> 
-	<div class= "center" >
-	  	Loading...
+    <div class= "center" ng-hide="loggedIn">
+	  	{{loggedIn}}
 	</div>
 
 
-    <ons-page ng-controller="Categories" ng-show="loggedIn">
+
+    <ons-page ng-controller="Categories">
         <ons-toolbar >
             <div class="left">
               <ons-toolbar-button ng-click="menu.toggle()">
@@ -23,7 +22,7 @@
 
 
 
-    <body>
+    <body ng-show="loggedIn">
         <ons-list style="margin-top: 0px;">
             <ons-list-item ng-repeat="categ in options" >
                 <!--<ons-list-header ng-if="header!=interest.get('Category')">{{header = interest.get('Category')}}</ons-list-header>-->
