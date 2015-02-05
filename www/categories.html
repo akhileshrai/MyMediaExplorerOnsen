@@ -1,7 +1,5 @@
 
-    <div class= "center" ng-hide="loggedIn">
-	  	{{loggedIn}}
-	</div>
+
 
 
 
@@ -20,9 +18,12 @@
             <div class="center">CATEGORIES</div>
         </ons-toolbar>
 
-
+    <div class= "center" ng-hide="loggedIn">
+	  	{{loggedIn}}
+	</div>
 
     <body ng-show="loggedIn">
+    	      <ons-button onclick="navOut.pushPage('login.html')">Push</ons-button>
         <ons-list style="margin-top: 0px;">
             <ons-list-item ng-repeat="categ in options" >
                 <!--<ons-list-header ng-if="header!=interest.get('Category')">{{header = interest.get('Category')}}</ons-list-header>-->

@@ -14,6 +14,7 @@
             </div>
             <div class="center">Login</div>
         </ons-toolbar>
+        
 
 <body>
 
@@ -55,6 +56,8 @@
         	<div ng-if="user.attributes.profilePicture" class="center" style="margin:auto;"><img src="{{user.attributes.profilePicture}}" /></div>
 	       	<div class="center" style="margin:auto;"><button class='btn' ng-click="FB_login()">Connect with Facebook</button></div>
         	<div class="center" style="margin:auto;"><button class='btn' ng-click="logout()">Logout</button></div>
+        	      <ons-button onclick="navOut.popPage()">Pop</ons-button>
+        	      <ons-button onclick="menu.toggle()">Menu</ons-button>
 
         </div>
 </body>
