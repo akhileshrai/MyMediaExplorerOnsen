@@ -139,10 +139,11 @@ mediaApp.controller('Categories', function($scope, ParseUser) {
 	//console.log(ParseUser);
 	console.log(loggedIn);
 
-	if (loggedIn){
+	if (!loggedIn){
 		console.log('got here but didnt do shit');
 		//Send to login page
-		ons.slidingMenu.setMainPage('login.html')
+		//ons.slidingMenu.setMainPage('login.html');
+		navOut.pushPage('login.html');
 
 		/*setTimeout(function() {
             //navOut.pushPage('login.html');    
@@ -286,11 +287,7 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 			}, function(error) {console.log(error);}
 			);
 			setTimeout(function() {
-				//navOut.pushPage('categories.html');   
-				//navOut.resetToPage('categories.html');
-				//navOut.insertPage(-1,'categories.html');
-				ons.slidingMenu.setMainPage('categories.html')
-
+				navOut.popPage();   
 				console.log(navOut.getPages());
 			}, 1000);
 

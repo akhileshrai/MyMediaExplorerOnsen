@@ -1,4 +1,8 @@
-<ons-navigator>
+
+
+
+
+
     <ons-page ng-controller="Categories">
         <ons-toolbar >
             <div class="left">
@@ -7,16 +11,15 @@
               </ons-toolbar-button>
             </div>
             <div class="right">
-              <ons-toolbar-button ng-click="console.log(navigator.getPages())">
+              <ons-toolbar-button ng-click="console.log(navOut.getPages())">
                 <ons-icon icon="ion-gear-a" size="28px" fixed-width="false"></ons-icon>
               </ons-toolbar-button>
             </div>
             <div class="center">CATEGORIES</div>
         </ons-toolbar>
 
-
-
-    <body>
+    <body ng-show="loggedIn">
+    	      <ons-button onclick="navOut.pushPage('login.html')">Push</ons-button>
         <ons-list style="margin-top: 0px;">
             <ons-list-item ng-repeat="categ in options" >
                 <!--<ons-list-header ng-if="header!=interest.get('Category')">{{header = interest.get('Category')}}</ons-list-header>-->
@@ -33,4 +36,5 @@
         </ons-list>
     </body>
 </ons-page>
-</ons-navigator>
+
+

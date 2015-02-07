@@ -78,49 +78,6 @@ mediaApp.factory('ParseService', function($resource){
       },
 
       // Login a user using Facebook
-      FB_login : function FB_login(callback) {
-
-        Parse.FacebookUtils.logIn(null, {
-          success: function(user) {
-            if (!user.existed()) {
-              alert("User signed up and logged in through Facebook!");
-            } else {
-              alert("User logged in through Facebook!");
-                    		console.log(user);
-                    		FB.api('/me', function(response) {
-    alert("Name: "+ response.name + "\nFirst name: "+ response.first_name + "ID: "+response.id);
-    var img_link = "http://graph.facebook.com/"+response.id+"/picture"
-});
-
-            }
-            loggedInUser = user;
-            
-            callback(user);
-          },
-          error: function(user, error) {
-            alert("User cancelled the Facebook login or did not fully authorize.");
-          }
-        });
-      },
-
-      // Register a user
-      signUp : function signUp(username, password, callback) {
-      	Parse.User.signUp(username, password, { ACL: new Parse.ACL() }, {
-            success: function(user) {
-                loggedInUser = user;
-                callback(user);
-            },
-
-            error: function(user, error) {
-              alert("Error: " + error.message);
-            }
-        });
-      },
-
-      // Logout current user
-      logout : function logout(callback) {
-        Parse.User.logOut();
-      },
 
       // Get all public books
       getBooks : function getBooks(callback) {
@@ -184,7 +141,7 @@ mediaApp.factory('ParseService', function($resource){
                 },
                 error: function(error) {
                   alert("Error: " + error.message);
-                }
+                }	
               });
             },
             error: function(error) {
@@ -282,6 +239,21 @@ mediaApp.factory('ParseService', function($resource){
 
     // The factory function returns ParseService, which is injected into controllers.
     return ParseService;
+});
+
+mediaApp.factory('ParseUser', function($resource){
+
+    return {
+    	loggedInCheck : function loggedInCheck() {
+    		
+			var loggedIn = false;
+			if(Parse.User.current()) {
+		        loggedIn = true
+		    }
+	        return loggedIn;
+    	}
+    };
+ 
 });
 
 

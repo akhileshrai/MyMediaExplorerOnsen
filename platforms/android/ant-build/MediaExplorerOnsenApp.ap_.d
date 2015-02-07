@@ -254,6 +254,7 @@ C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\asset
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\cordova.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\cordova_plugins.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\css \
+C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\feed.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\home.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\homeNav.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\icon.png \
@@ -292,6 +293,7 @@ C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\asset
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\initservices.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\services.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\angular-resource.js \
+C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\angular-ui-router.min.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\jquery.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\onsen \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\parse-1.3.3.js \
