@@ -256,7 +256,25 @@ mediaApp.factory('ParseUser', function($resource){
  
 });
 
+mediaApp.config(function($httpProvider) {
+     $httpProvider.defaults.useXDomain = true;
+       delete $httpProvider.defaults.headers
+        .common['X-Requested-With'];
+});
 
-
+mediaApp.factory('RestService', function($resource){
+	return $resource('https://api.parse.com/1/classes/Interests' , null, {
+            get: {
+                headers: {
+                    'X-Parse-Application-Id': 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire',
+                    //'X-Parse-REST-API-Key': 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn'
+                    'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+                }
+            }
+       });
+	
+	
+	
+});
 
 

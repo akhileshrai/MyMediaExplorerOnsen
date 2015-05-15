@@ -37,7 +37,7 @@
    <ons-toolbar modifier="transparent"></ons-toolbar>
     <ons-list>
         <ons-list-item
-                ng-click="ons.slidingMenu.toggleMenu();
+                ng-click="menu.toggleMenu();
                 navOut.pushPage('feed.html', {animation: 'none'} );
 			    ">
             <i class="fa fa-home fa-lg" style="color: #666"></i>
@@ -45,7 +45,7 @@
         </ons-list-item>
 
         <ons-list-item
-                ng-click="ons.slidingMenu.toggleMenu();
+                ng-click="menu.toggleMenu();
                 navOut.pushPage('login.html', {animation: 'none'} );
                 ">
             <i class="fa fa-search fa-lg" style="color: #666"></i>
@@ -55,7 +55,7 @@
 		<ons-list-item 
                 ng-click="
                 navOut.pushPage('categories.html', {animation: 'none'} );
-                ons.slidingMenu.toggleMenu();	
+                menu.toggleMenu();	
                 "> 
 			<i class="fa fa-gear fa-lg" style="color: #666"></i>
 			&nbsp; CATEGORIES
@@ -64,7 +64,7 @@
         <ons-list-item
                 ng-click="
                 navOut.pushPage('about.html', {animation: 'none'} );
-                ons.slidingMenu.toggleMenu();">
+                menu.toggleMenu();">
             <i class="fa fa-info-circle fa-lg" style="color: #666"></i>
             &nbsp; About
         </ons-list-item>

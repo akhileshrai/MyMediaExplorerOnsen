@@ -231,8 +231,10 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 	console.log('hi ctrl');
 	var fbLogged = new Parse.Promise();
 	if (!$scope.user) {
+		console.log('user is blank so assigning parse')
 		$scope.user = Parse.User.current();
-	
+		console.log(Parse.User.current());
+
 	
 	}
 	
@@ -250,7 +252,8 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 		}
 		fbLogged.resolve(authData);
 		fbLoginSuccess = null;
-		console.log(response);
+		console.log(authData);
+		console.log('finished getting fb data');
 	};
 
 	var fbLoginError = function(error) {
@@ -271,19 +274,23 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 		}).then(function(userObject) {
 			var authData = userObject.get('authData');
 			facebookConnectPlugin.api('/me', null, function(response) {
-				console.log('step1');
 				userObject.set('name', response.name);
 				userObject.set('email', response.email);
 				userObject.save();
+				console.log('received email and name')
 				
 			}, function(error) {
 				console.log(error);
 			});
 			facebookConnectPlugin.api('/me/picture', null, function(response) {
+				console.log('getting picture');
 				userObject.set('profilePicture', response.data.url);
 				userObject.save();
 				$scope.user = Parse.User.current();
 				$scope.$apply();
+				console.log(Parse.User.current());
+
+				console.log('applying to scope')
 			}, function(error) {console.log(error);}
 			);
 			setTimeout(function() {

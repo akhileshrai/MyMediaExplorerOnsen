@@ -130,7 +130,7 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 })
 
 
-mediaApp.controller('Categories', function($scope, ParseUser) {
+mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
  
 
 	console.log("controller user:");
@@ -138,6 +138,7 @@ mediaApp.controller('Categories', function($scope, ParseUser) {
 	$scope.loggedIn = loggedIn;
 	//console.log(ParseUser);
 	console.log(loggedIn);
+	
 
 	if (!loggedIn){
 		console.log('got here but didnt do shit');
@@ -160,8 +161,10 @@ mediaApp.controller('Categories', function($scope, ParseUser) {
 	var query = new Parse.Query(Category);
 
 	//query.equalTo('Category', 'Sports');
-	query.find({
-		success : function(results) {
+	/*query.find({
+		success :*/ 
+		
+	var menuDisplay =	function(results) {
 			$scope.resultQuery = 'Results length:' + results.length;
 			$scope.interests = results;
 			var categcount = -1;
@@ -180,7 +183,7 @@ mediaApp.controller('Categories', function($scope, ParseUser) {
 				//console.log (results[i].attributes);
 
 				//console.log(menu, categcount)
-				if (categ != results[i].attributes.Category) {
+				if (categ != results[i].Category) {
 					menu = {
 						id : 0,
 						title : [],
@@ -190,20 +193,20 @@ mediaApp.controller('Categories', function($scope, ParseUser) {
 
 					//START NEW CATEGORY
 					interest_array = [];
-					menu.title.push(results[i].attributes.Category)
+					menu.title.push(results[i].Category)
 					categcount += 1;
-					categ = results[i].attributes.Category;
+					categ = results[i].Category;
 
 					//console.log(categ);
 					//options[i]['Interests'].push(results[i].attributes.Interest);
 				}
 				interest_array.push({
-					name : results[i].attributes.Interest,
+					name : results[i].Interest,
 					checked : check
-				})
+				});
 				//menu.interests.checked=categcount%2;
 				menu.interests[0] = (interest_array);
-				menu.id = (results[i].attributes.Id);
+				menu.id = (results[i].Id);
 				menu.toggle = false;
 				check = '';
 
@@ -218,14 +221,21 @@ mediaApp.controller('Categories', function($scope, ParseUser) {
 			console.log(options);
 			$scope.options = options;
 
-			$scope.$apply();
-		},
+			//$scope.$apply();
+		};/*,
 		error : function(error) {
 			alert("Network seems offside :/" + error.code + error.message)
 		}
-	})
+	});*/
+    var restCategs = RestService.get({ id: $scope.id }, function() {
+    	console.log('rest ran');
+    	console.log(restCategs.results);
+    	menuDisplay(restCategs.results);
+  	});
 
-})
+
+
+});
 
 mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 	console.log('hi ctrl');
@@ -249,7 +259,7 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 			id : String(response.authResponse.userID),
 			access_token : response.authResponse.accessToken,
 			expiration_date : expDate
-		}
+		};
 		fbLogged.resolve(authData);
 		fbLoginSuccess = null;
 		console.log(authData);
@@ -314,5 +324,14 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
     
 
 
+});
+
+mediaApp.controller('restCtrl', function restCtrl($scope, RestService) {
+	console.log(RestService);
+	
+	var entry = RestService.get({ id: $scope.id }, function() {
+    	console.log(entry);
+  	});
+	console.log('rest api testing begins!');
 });
 
