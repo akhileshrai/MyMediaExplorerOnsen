@@ -263,12 +263,30 @@ mediaApp.config(function($httpProvider) {
 });
 
 mediaApp.factory('RestService', function($resource){
+	var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
+	var clientKey = 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L';
+	var restKey = 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn';
+	
 	return $resource('https://api.parse.com/1/classes/Interests' , null, {
             get: {
                 headers: {
-                    'X-Parse-Application-Id': 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire',
-                    //'X-Parse-REST-API-Key': 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn'
-                    'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+                    'X-Parse-Application-Id': appId,
+                    'X-Parse-REST-API-Key': restKey
+                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+                }
+            },
+            post: {
+                headers: {
+                    'X-Parse-Application-Id': appId,
+                    'X-Parse-REST-API-Key': restKey
+                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+                }
+            },
+            query: {
+                headers: {
+                    'X-Parse-Application-Id': appId,
+                    'X-Parse-REST-API-Key': restKey
+                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
                 }
             }
        });

@@ -137,7 +137,7 @@ mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
 	var loggedIn = ParseUser.loggedInCheck();
 	$scope.loggedIn = loggedIn;
 	//console.log(ParseUser);
-	console.log(loggedIn);
+	console.log(ParseUser);
 	
 
 	if (!loggedIn){
@@ -329,9 +329,17 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 mediaApp.controller('restCtrl', function restCtrl($scope, RestService) {
 	console.log(RestService);
 	
-	var entry = RestService.get({ id: $scope.id }, function() {
+	var entry = RestService.query({ id: $scope.id }, function() {
+    	console.log ('Entry:');
     	console.log(entry);
   	});
 	console.log('rest api testing begins!');
+	
+	var tosave = 'data';
+	var result = RestService.save(tosave, function() {
+		console.log ('Saving:');
+    	console.log(tosave);
+	});
+	
 });
 
