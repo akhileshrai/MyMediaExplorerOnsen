@@ -27,7 +27,7 @@ mediaApp.controller('SettingsCtrl', function($scope, SettingsService) {
 		$scope.maxResults = this.maxResults;
 		SettingsService.set('maxResults', this.maxResults);
 	};
-})
+});
 
 mediaApp.controller('SearchCtrl', function($scope, MediaService, $location, SettingsService, $rootScope) {
 	$scope.request = {};
@@ -70,14 +70,14 @@ mediaApp.controller('SearchCtrl', function($scope, MediaService, $location, Sett
 		if (SettingsService.get('filterTerm'))
 			$scope.filterTerm = SettingsService.get('filterTerm');
 		doSearch($scope.request.query);
-	}
+	};
 
 	$scope.checkMedia = function(item) {
 		if (item.kind === 'song' || item.kind === 'music-video') {
 			$scope.openPlayModal(item);
 			$scope.infoTxt = null;
 		} else
-			$scope.infoTxt = 'No suitable player available for the selected media type.'
+			$scope.infoTxt = 'No suitable player available for the selected media type.';
 	};
 
 	$scope.openPlayModal = function(item) {
@@ -91,12 +91,12 @@ mediaApp.controller('SearchCtrl', function($scope, MediaService, $location, Sett
 		SettingsService.set('artist', item.artistName);
 
 		$scope.ons.screen.presentPage('playModalNav.html');
-	}
+	};
 
 	$scope.openSortModal = function() {
 		$scope.ons.screen.presentPage('sortModalNav.html');
-	}
-})
+	};
+});
 
 mediaApp.controller('PlayMediaCtrl', function($scope, SettingsService) {
 	console.log("Kind " + this.kind);
@@ -107,8 +107,8 @@ mediaApp.controller('PlayMediaCtrl', function($scope, SettingsService) {
 
 	$scope.closePlayModal = function() {
 		$scope.playModal.hide();
-	}
-})
+	};
+});
 
 mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 	$scope.filterTerm = "";
@@ -126,8 +126,8 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 		SettingsService.set('filterTerm', $scope.filterTerm);
 		SettingsService.set('sortBy', $rootScope.sortBy);
 		$scope.ons.screen.dismissPage();
-	}
-})
+	};
+});
 
 
 mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
@@ -237,11 +237,11 @@ mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
 
 });
 
-mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
+mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService) {
 	console.log('hi ctrl');
 	var fbLogged = new Parse.Promise();
 	if (!$scope.user) {
-		console.log('user is blank so assigning parse')
+		console.log('user is blank so assigning parse');
 		$scope.user = Parse.User.current();
 		console.log(Parse.User.current());
 
@@ -254,16 +254,25 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 			return;
 		}
 		var expDate = new Date(new Date().getTime() + response.authResponse.expiresIn * 1000).toISOString();
+        
+        var authData = new String;
 
-		var authData = {
-			id : String(response.authResponse.userID),
-			access_token : response.authResponse.accessToken,
-			expiration_date : expDate
-		};
-		fbLogged.resolve(authData);
+		authData = "{\"facebook\":{	id : String(response.authResponse.userID),	access_token : response.authResponse.accessToken,	expiration_date : expDate		}}";
+		//fbLogged.resolve(authData);
 		fbLoginSuccess = null;
+		//var fauthdata = {"facebook":authData};
 		console.log(authData);
+
+		var loggedInRest = LoginService.post(authData, function(){ 
+			console.log('logged in the user through rest!!!');
+			console.log(loggedInRest);
+		});
+			
 		console.log('finished getting fb data');
+	
+		
+		
+	
 	};
 
 	var fbLoginError = function(error) {
@@ -272,7 +281,6 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 
 	$scope.FB_login = function() {
 		console.log('Login');
-		console.log(navOut.getPages());
 		if (!window.cordova) {
 			//facebookConnectPlugin.browserInit('353205054847621');
 		}
@@ -280,27 +288,26 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 
 		fbLogged.then(function(authData) {
 			console.log('Promised');
+			
+			
 			return Parse.FacebookUtils.logIn(authData);
 		}).then(function(userObject) {
 			var authData = userObject.get('authData');
 			facebookConnectPlugin.api('/me', null, function(response) {
 				userObject.set('name', response.name);
 				userObject.set('email', response.email);
-				userObject.save();
-				console.log('received email and name')
-				
+				userObject.save();			
 			}, function(error) {
 				console.log(error);
 			});
 			facebookConnectPlugin.api('/me/picture', null, function(response) {
-				console.log('getting picture');
 				userObject.set('profilePicture', response.data.url);
 				userObject.save();
 				$scope.user = Parse.User.current();
 				$scope.$apply();
 				console.log(Parse.User.current());
 
-				console.log('applying to scope')
+				console.log('applying to scope');
 			}, function(error) {console.log(error);}
 			);
 			setTimeout(function() {
@@ -312,8 +319,6 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
 			console.log(error);
 		});
 		
-		//console.log(userObject);
-		console.log(Parse.User.current());
 	
 	};
 	$scope.logout = function() {
@@ -335,11 +340,12 @@ mediaApp.controller('restCtrl', function restCtrl($scope, RestService) {
   	});
 	console.log('rest api testing begins!');
 	
-	var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing'};
+	/*var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing'};
 	var result = RestService.post(tosave, function() {
 		console.log ('Saving:');
     	console.log(tosave);
-	});	
+	});*/	
+	
 	
 });
 
