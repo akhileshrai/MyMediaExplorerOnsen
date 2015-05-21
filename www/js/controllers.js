@@ -257,16 +257,34 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService) {
         
         var authData = new String;
 
-		authData = "{\"facebook\":{	id : String(response.authResponse.userID),	access_token : response.authResponse.accessToken,	expiration_date : expDate		}}";
+		authData =	{
+						authData: { 
+							facebook:{	
+								id : String(response.authResponse.userID),	
+								access_token : response.authResponse.accessToken,	
+								expiration_date : expDate
+							}
+						}
+					};
 		//fbLogged.resolve(authData);
+		var loggedInRest = LoginService.post(authData, function(){ 
+			console.log('logged in the user through rest!!!');
+				
+			//var fauthData = loggedInRest.toJSON();
+			//console.log(fauthData);
+					
+		});
+		
+		
+		fbLogged.resolve(loggedInRest);
 		fbLoginSuccess = null;
 		//var fauthdata = {"facebook":authData};
 		console.log(authData);
 
-		var loggedInRest = LoginService.post(authData, function(){ 
+		/*var loggedInRest = LoginService.post(authData, function(){ 
 			console.log('logged in the user through rest!!!');
 			console.log(loggedInRest);
-		});
+		});*/
 			
 		console.log('finished getting fb data');
 	
@@ -288,11 +306,17 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService) {
 
 		fbLogged.then(function(authData) {
 			console.log('Promised');
+			var userObject = angular.toJson(authData);
+
+			return userObject;
+
+			//return Parse.FacebookUtils.logIn(authData);
 			
-			
-			return Parse.FacebookUtils.logIn(authData);
 		}).then(function(userObject) {
-			var authData = userObject.get('authData');
+			console.log('setting picture');
+			
+			var authData = userObject.authData;
+			console.log(authData);
 			facebookConnectPlugin.api('/me', null, function(response) {
 				userObject.set('name', response.name);
 				userObject.set('email', response.email);
