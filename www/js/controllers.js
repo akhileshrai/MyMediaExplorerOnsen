@@ -7,13 +7,13 @@ mediaApp.controller('AboutCtrl', function($scope) {
 		} else {
 			location.href = 'mailto:?subject=Question about media explorer&body=';
 		}
-	}
+	};
 
 	$scope.linkTo = function(link) {
 		console.log("Link to " + link);
 		var ref = window.open(link, '_blank', 'location=yes');
-	}
-})
+	};
+});
 
 mediaApp.controller('SettingsCtrl', function($scope, SettingsService) {
 	$scope.navTitle = "Settings";
@@ -23,7 +23,7 @@ mediaApp.controller('SettingsCtrl', function($scope, SettingsService) {
 	$scope.maxResults = 50;
 
 	$scope.changeNumResults = function() {
-		console.log("Results set to " + this.maxResults)
+		console.log("Results set to " + this.maxResults);
 		$scope.maxResults = this.maxResults;
 		SettingsService.set('maxResults', this.maxResults);
 	};
@@ -36,12 +36,12 @@ mediaApp.controller('SearchCtrl', function($scope, MediaService, $location, Sett
 	$scope.mediaTypes.type = 'all';
 
 	if (SettingsService.get('sortBy'))
-		$rootScope.sortBy = SettingsService.get('sortBy')
+		$rootScope.sortBy = SettingsService.get('sortBy');
 	else
 		$rootScope.sortBy = "artistName";
 
 	if (SettingsService.get('filterTerm'))
-		$rootScope.filterTerm = SettingsService.get('filterTerm')
+		$rootScope.filterTerm = SettingsService.get('filterTerm');
 	else
 		$rootScope.filterTerm = "";
 
@@ -114,7 +114,7 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 	$scope.filterTerm = "";
 
 	if (SettingsService.get('sortBy'))
-		$scope.sortBy = SettingsService.get('sortBy')
+		$scope.sortBy = SettingsService.get('sortBy');
 	else
 		$scope.sortBy = "artistName";
 
@@ -239,7 +239,7 @@ mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
 
 mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService) {
 	console.log('hi ctrl');
-	var fbLogged = new Parse.Promise();
+	var fbLogged = new $q.defer();//Parse.Promise();
 	if (!$scope.user) {
 		console.log('user is blank so assigning parse');
 		$scope.user = Parse.User.current();
