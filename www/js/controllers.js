@@ -237,9 +237,47 @@ mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
 
 });
 
-mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService) {
+mediaApp.controller('LoginCtrl', function LoginCtrl($scope, $q, LoginService) {
 	console.log('hi ctrl');
 	var fbLogged = new $q.defer();//Parse.Promise();
+	console.log(fbLogged);
+	fbLogged.promise.then(function(authData) {
+		console.log('Promised');
+		var userObject = angular.toJson(authData);
+		return userObject;
+		})
+		.then(function(userObject) {
+			console.log('setting picture');
+			
+			var authData = userObject.authData;
+			console.log(authData);
+			facebookConnectPlugin.api('/me', null, function(response) {
+				userObject.set('name', response.name);
+				userObject.set('email', response.email);
+				userObject.save();			
+			}, function(error) {
+				console.log(error);
+			});
+			facebookConnectPlugin.api('/me/picture', null, function(response) {
+				userObject.set('profilePicture', response.data.url);
+				userObject.save();
+				$scope.user = Parse.User.current();
+				$scope.$apply();
+				console.log(Parse.User.current());
+
+				console.log('applying to scope');
+			}, function(error) {console.log(error);}
+			);
+			setTimeout(function() {
+				navOut.popPage();   
+				console.log(navOut.getPages());
+			}, 1000);
+
+		}, function(error) {
+			console.log(error);
+	});
+
+	
 	if (!$scope.user) {
 		console.log('user is blank so assigning parse');
 		$scope.user = Parse.User.current();
@@ -298,52 +336,7 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService) {
 	};
 
 	$scope.FB_login = function() {
-		console.log('Login');
-		if (!window.cordova) {
-			//facebookConnectPlugin.browserInit('353205054847621');
-		}
 		facebookConnectPlugin.login(['email'], fbLoginSuccess, fbLoginError);
-
-		fbLogged.then(function(authData) {
-			console.log('Promised');
-			var userObject = angular.toJson(authData);
-
-			return userObject;
-
-			//return Parse.FacebookUtils.logIn(authData);
-			
-		}).then(function(userObject) {
-			console.log('setting picture');
-			
-			var authData = userObject.authData;
-			console.log(authData);
-			facebookConnectPlugin.api('/me', null, function(response) {
-				userObject.set('name', response.name);
-				userObject.set('email', response.email);
-				userObject.save();			
-			}, function(error) {
-				console.log(error);
-			});
-			facebookConnectPlugin.api('/me/picture', null, function(response) {
-				userObject.set('profilePicture', response.data.url);
-				userObject.save();
-				$scope.user = Parse.User.current();
-				$scope.$apply();
-				console.log(Parse.User.current());
-
-				console.log('applying to scope');
-			}, function(error) {console.log(error);}
-			);
-			setTimeout(function() {
-				navOut.popPage();   
-				console.log(navOut.getPages());
-			}, 1000);
-
-		}, function(error) {
-			console.log(error);
-		});
-		
-	
 	};
 	$scope.logout = function() {
           console.log('Logout');
