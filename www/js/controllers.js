@@ -237,8 +237,8 @@ mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
 
 });
 
-mediaApp.controller('LoginCtrl', function LoginCtrl($scope, $q, LoginService, User) {
-	var fbLogged = new $q.defer();//Parse.Promise();
+mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService, User) {
+	/*var fbLogged = new $q.defer();//Parse.Promise();
 	fbLogged.promise.then(function(authData) {
 		console.log('After resolve...');
 		var userObject = angular.toJson(authData);
@@ -273,17 +273,18 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, $q, LoginService, Us
 
 		}, function(error) {
 			console.log(error);
-	});
+	});*/
 
 	
 	if (!$scope.user) {
 		console.log('user is blank so assigning parse');
-		$scope.user = Parse.User.current();
-		console.log(Parse.User.current());
+		//$scope.user = Parse.User.current();
+		$scope.user = User.current();
+		console.log(User.current());
 
 	
 	}
-	
+	/*
 	var fbLoginSuccess = function(response) {
 		if (!response.authResponse) {
 			fbLoginError("Cannot find the authResponse");
@@ -320,14 +321,14 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, $q, LoginService, Us
 
 	var fbLoginError = function(error) {
 		fbLogged.reject(error);
-	};
+	};*/
 
 	$scope.FB_login = function() {
-		facebookConnectPlugin.login(['email'], fbLoginSuccess, fbLoginError);
+		User.logIn();
 	};
 	$scope.logout = function() {
           console.log('Logout');
-          Parse.User.logOut();
+          User.logOut();
           $scope.user = null;
     };
     
