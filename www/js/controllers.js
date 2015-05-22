@@ -237,12 +237,10 @@ mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
 
 });
 
-mediaApp.controller('LoginCtrl', function LoginCtrl($scope, $q, LoginService) {
-	console.log('hi ctrl');
+mediaApp.controller('LoginCtrl', function LoginCtrl($scope, $q, LoginService, User) {
 	var fbLogged = new $q.defer();//Parse.Promise();
-	console.log(fbLogged);
 	fbLogged.promise.then(function(authData) {
-		console.log('Promised');
+		console.log('After resolve...');
 		var userObject = angular.toJson(authData);
 		return userObject;
 		})
@@ -307,23 +305,12 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, $q, LoginService) {
 		//fbLogged.resolve(authData);
 		var loggedInRest = LoginService.post(authData, function(){ 
 			console.log('logged in the user through rest!!!');
-				
-			//var fauthData = loggedInRest.toJSON();
-			//console.log(fauthData);
-					
 		});
 		
 		
 		fbLogged.resolve(loggedInRest);
 		fbLoginSuccess = null;
-		//var fauthdata = {"facebook":authData};
 		console.log(authData);
-
-		/*var loggedInRest = LoginService.post(authData, function(){ 
-			console.log('logged in the user through rest!!!');
-			console.log(loggedInRest);
-		});*/
-			
 		console.log('finished getting fb data');
 	
 		

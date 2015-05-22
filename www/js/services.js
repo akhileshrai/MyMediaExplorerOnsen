@@ -82,5 +82,17 @@ mediaApp.factory('LoginService', function($resource){
 	
 	
 });
-
+mediaApp.factory('User', function(){
+	var outigoer = new Object();
+	
+	return {
+		login: function(){ 
+			
+			
+		}
+		
+	};
+	
+	
+});
 
