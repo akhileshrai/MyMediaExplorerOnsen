@@ -23,18 +23,20 @@ mediaApp.config(function($httpProvider) {
         .common['X-Requested-With'];
 });
 
-mediaApp.factory('RestService', function($resource){
+mediaApp.factory('RestService', function($resource, User){
 	var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
 	var clientKey = 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L';
 	var javaKey = 'xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous';
 	var restKey = 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn';
+	var user=User.current();
 	///1/classes/<className>/<objectId>
 	return $resource('https://api.parse.com/1/classes/Interests' , null, {
             get: {
             	//method: 'GET',
                 headers: {
                     'X-Parse-Application-Id': appId,
-                    'X-Parse-REST-API-Key': restKey
+                    'X-Parse-REST-API-Key': restKey,
+                    'X-Parse-Session-Token': user.sessionToken                    
                     //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
                 }
             },
@@ -51,7 +53,8 @@ mediaApp.factory('RestService', function($resource){
    	            isArray: false, 
                 headers: {
    	            	'X-Parse-Application-Id': appId,
-                    'X-Parse-REST-API-Key': restKey
+                    'X-Parse-REST-API-Key': restKey,
+                    'X-Parse-Session-Token': user.sessionToken
                     //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
                 }
             }
@@ -87,49 +90,38 @@ mediaApp.factory('User', function($q, LoginService){
 	
 	return {
 		current: function(){
+			outigoer.profilePicture=localStorage.getItem('profilePicture');
+			outigoer.name = localStorage.getItem('name');
+			outigoer.sessionToken = localStorage.getItem('sessionToken');
 			return outigoer;
 		},
-		logOut: function(){ console.log('logged outish');},
+		loggedInCheck: function() {
+			if (outigoer.sessionToken) {
+				return true;
+			}
+			else return false;
+		},
+		logOut: function(){ 
+			localStorage.removeItem('profilePicture');
+			localStorage.removeItem('name');
+			localStorage.removeItem('sessionToken');
+			console.log('logged outish');},
 		logIn: function(){
 			var fbLogged = new $q.defer();//Parse.Promise();
 			
-			fbLogged.promise.then(function(authData) {
-				console.log('After resolve...');
-				outigoer.authData = authData;
-				console.log(authData);
-				console.log(authData['sessionToken']);
-				console.log(authData.get('sessionToken'));
-		
-				})
-				.then(function() {
+			fbLogged.promise.then(function() {
 					console.log('setting picture');
-					/*
-					var authData = outigoer.authData;
-					console.log(authData);*/
+
 					facebookConnectPlugin.api('/me', null, function(response) {
-						outigoer.name = response.name;
-						/*userObject.set('email', response.email);
-						userObject.save();*/		
-						console.log('got name');
-						console.log(response.name);
-						
-					}, function(error) {
-						console.log(error);
-					});
-					/*
+						localStorage.setItem('name', response.name);
+					}, function(error) {console.log(error);	});
+					
 					facebookConnectPlugin.api('/me/picture', null, function(response) {
-						userObject.set('profilePicture', response.data.url);
-						userObject.save();
-						$scope.user = Parse.User.current();
-						$scope.$apply();
-						console.log(Parse.User.current());
-		
-						console.log('applying to scope');
-					}, function(error) {console.log(error);});*/
+						localStorage.setItem('profilePicture', response.data.url);
+					}, function(error) {console.log(error);});
 					
 					setTimeout(function() {
 						navOut.popPage();   
-						console.log(navOut.getPages());
 					}, 1000);
 		
 				}, function(error) {
@@ -154,18 +146,12 @@ mediaApp.factory('User', function($q, LoginService){
 									}
 								}
 							};
-				//fbLogged.resolve(authData);
-				var loggedInRest = LoginService.post(authData, function(){ 
-					console.log('logged in the user through rest!!!');
+				var loggedInRest = LoginService.post(authData, function(response){ 
 				});
 				
 				
 				fbLogged.resolve(loggedInRest);
 				fbLoginSuccess = null;
-				console.log(authData);
-				console.log('finished getting fb data');
-			
-				
 				
 			
 			};

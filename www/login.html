@@ -53,8 +53,8 @@
   
         <div>
         	
-        	<div ng-if="user.attributes.profilePicture" class="center" style="margin:auto;"><img src="{{user.attributes.profilePicture}}" /></div>
-        	<div ng-if="user" class="center" style="margin:auto;"></div>
+        	<div ng-if="user.profilePicture" class="center" style="margin:auto;"><img ng-src="{{user.profilePicture}}" /></div>
+        	<div ng-if="user" class="center" style="margin:auto;">{{user.name}}</div>
 	       	
 	       	<div class="center" style="margin:auto;"><button class='btn' ng-click="FB_login()">Connect with Facebook</button></div>
         	<div class="center" style="margin:auto;"><button class='btn' ng-click="logout()">Logout</button></div>

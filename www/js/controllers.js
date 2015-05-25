@@ -130,14 +130,14 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 });
 
 
-mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
+mediaApp.controller('Categories', function($scope, User, RestService) {
  
 
 	console.log("controller user:");
-	var loggedIn = ParseUser.loggedInCheck();
+	var loggedIn = User.loggedInCheck();
 	$scope.loggedIn = loggedIn;
 	//console.log(ParseUser);
-	console.log(ParseUser);
+	//console.log(ParseUser);
 	
 
 	if (!loggedIn){
@@ -238,42 +238,6 @@ mediaApp.controller('Categories', function($scope, ParseUser, RestService) {
 });
 
 mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService, User) {
-	/*var fbLogged = new $q.defer();//Parse.Promise();
-	fbLogged.promise.then(function(authData) {
-		console.log('After resolve...');
-		var userObject = angular.toJson(authData);
-		return userObject;
-		})
-		.then(function(userObject) {
-			console.log('setting picture');
-			
-			var authData = userObject.authData;
-			console.log(authData);
-			facebookConnectPlugin.api('/me', null, function(response) {
-				userObject.set('name', response.name);
-				userObject.set('email', response.email);
-				userObject.save();			
-			}, function(error) {
-				console.log(error);
-			});
-			facebookConnectPlugin.api('/me/picture', null, function(response) {
-				userObject.set('profilePicture', response.data.url);
-				userObject.save();
-				$scope.user = Parse.User.current();
-				$scope.$apply();
-				console.log(Parse.User.current());
-
-				console.log('applying to scope');
-			}, function(error) {console.log(error);}
-			);
-			setTimeout(function() {
-				navOut.popPage();   
-				console.log(navOut.getPages());
-			}, 1000);
-
-		}, function(error) {
-			console.log(error);
-	});*/
 
 	
 	if (!$scope.user) {
@@ -284,47 +248,17 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService, User) 
 
 	
 	}
-	/*
-	var fbLoginSuccess = function(response) {
-		if (!response.authResponse) {
-			fbLoginError("Cannot find the authResponse");
-			return;
-		}
-		var expDate = new Date(new Date().getTime() + response.authResponse.expiresIn * 1000).toISOString();
-        
-        var authData = new String;
 
-		authData =	{
-						authData: { 
-							facebook:{	
-								id : String(response.authResponse.userID),	
-								access_token : response.authResponse.accessToken,	
-								expiration_date : expDate
-							}
-						}
-					};
-		//fbLogged.resolve(authData);
-		var loggedInRest = LoginService.post(authData, function(){ 
-			console.log('logged in the user through rest!!!');
-		});
-		
-		
-		fbLogged.resolve(loggedInRest);
-		fbLoginSuccess = null;
-		console.log(authData);
-		console.log('finished getting fb data');
-	
-		
-		
-	
-	};
-
-	var fbLoginError = function(error) {
-		fbLogged.reject(error);
-	};*/
 
 	$scope.FB_login = function() {
 		User.logIn();
+		console.log("Current USer");
+		$scope.user = User.current();
+		//$scope.$apply();
+		console.log($scope.user);
+		
+
+		
 	};
 	$scope.logout = function() {
           console.log('Logout');
