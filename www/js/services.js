@@ -25,21 +25,35 @@ mediaApp.config(function($httpProvider) {
 
 mediaApp.factory('RestService', function($resource, User){
 	var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
-	var clientKey = 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L';
 	var javaKey = 'xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous';
 	var restKey = 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn';
 	var user=User.current();
 	///1/classes/<className>/<objectId>
-	return $resource('https://api.parse.com/1/classes/Interests' , null, {
-            get: {
+	return { 
+		url: function (url, callback) {
+;			return $resource('https://api.parse.com/1/classes/'+url , null, {
+            	get: {
             	//method: 'GET',
-                headers: {
-                    'X-Parse-Application-Id': appId,
-                    'X-Parse-REST-API-Key': restKey,
-                    'X-Parse-Session-Token': user.sessionToken                    
-                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
-                }
-            },
+	                headers: {
+	                    'X-Parse-Application-Id': appId,
+	                    'X-Parse-REST-API-Key': restKey,
+	                    'X-Parse-Session-Token': user.sessionToken                    
+	                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+	                }
+            	},
+            	'post': {
+	            	method: 'POST',
+	                headers: {
+	                    'X-Parse-Application-Id': appId,
+	                    'X-Parse-REST-API-Key': restKey
+	                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+	                }
+	            }
+            });
+		}
+	};
+            
+/*            
             'post': {
             	method: 'POST',
                 headers: {
@@ -58,7 +72,7 @@ mediaApp.factory('RestService', function($resource, User){
                     //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
                 }
             }
-       });
+       });*/
 	
 	
 	
@@ -72,13 +86,9 @@ mediaApp.factory('LoginService', function($resource){
 	return $resource('https://api.parse.com/1/users', null, {
 		'post': {
         	method: 'POST',
-        	//withCredentials: true,
         	headers: {
             	'X-Parse-Application-Id': appId,
-            	'X-Parse-REST-API-Key': restKey/*,
-            	'X-Parse-Revocable-Session': 1 ,
-            	'Content-Type': 'application/json'*/
-                     //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+            	'X-Parse-REST-API-Key': restKey
         	}
 		}
     });

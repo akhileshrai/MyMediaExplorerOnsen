@@ -136,34 +136,20 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 	console.log("controller user:");
 	var loggedIn = User.loggedInCheck();
 	$scope.loggedIn = loggedIn;
-	//console.log(ParseUser);
-	//console.log(ParseUser);
-	
 
 	if (!loggedIn){
 		console.log('got here but didnt do shit');
-		//Send to login page
-		//ons.slidingMenu.setMainPage('login.html');
 		navOut.pushPage('login.html');
-
-		/*setTimeout(function() {
-            //navOut.pushPage('login.html');    
-        }, 1000);*/
 	}
 	
 	
-	//console.log("Got to this Category controller");
 	$scope.resultQuery = 'HI';
-	//$scope. = SettingsService.get('kind');
 	$scope.options = {};
 
 	var Category = Parse.Object.extend("Interests");
 	var query = new Parse.Query(Category);
 
-	//query.equalTo('Category', 'Sports');
-	/*query.find({
-		success :*/ 
-		
+
 	var menuDisplay =	function(results) {
 			$scope.resultQuery = 'Results length:' + results.length;
 			$scope.interests = results;
@@ -273,18 +259,27 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService, User) 
 mediaApp.controller('restCtrl', function restCtrl($scope, RestService) {
 	console.log(RestService);
 	
-	var entry = RestService.query(function() {
+	var entry = RestService.url('Interests').get(function() {
     	console.log ('Entry:');
     	console.log(entry);
   	});
 	console.log('rest api testing begins!');
 	
-	/*var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing'};
-	var result = RestService.post(tosave, function() {
-		console.log ('Saving:');
-    	console.log(tosave);
-	});*/	
+
+	
+});
+
+
+mediaApp.controller('createCtrl', function restCtrl($scope, RestService) {
+	console.log('Create Controller Entered');
+	
+	var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing', 'blah':'blah'};
+	var result = RestService.url('Events').post(tosave, function() {
+		console.log ('Saving Event:');
+    	console.log(result);
+	});	
 	
 	
 });
+
 
