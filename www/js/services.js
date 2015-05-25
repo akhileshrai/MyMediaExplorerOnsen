@@ -147,6 +147,8 @@ mediaApp.factory('User', function($q, LoginService){
 								}
 							};
 				var loggedInRest = LoginService.post(authData, function(response){ 
+					localStorage.setItem('sessionToken', response.sessionToken);
+					console.log(response);
 				});
 				
 				
