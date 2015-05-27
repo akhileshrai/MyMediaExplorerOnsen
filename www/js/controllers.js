@@ -134,8 +134,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
  
 
 	console.log("controller user:");
-	var loggedIn = User.loggedInCheck();
-	$scope.loggedIn = loggedIn;
+	$scope.loggedIn = User.loggedInCheck();
 
 	if (!loggedIn){
 		console.log('got here but didnt do shit');
@@ -143,11 +142,8 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 	}
 	
 	
-	$scope.resultQuery = 'HI';
 	$scope.options = {};
 
-	var Category = Parse.Object.extend("Interests");
-	var query = new Parse.Query(Category);
 
 
 	var menuDisplay =	function(results) {
@@ -165,10 +161,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 				toggle : ''
 			};
 			for (var i = 0; i < results.length; i++) {
-				//header = interest.get('Category');
-				//console.log (results[i].attributes);
 
-				//console.log(menu, categcount)
 				if (categ != results[i].Category) {
 					menu = {
 						id : 0,
@@ -200,9 +193,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 
 				options[categcount] = menu;
 
-				/*while (header!=interest["Category"]) {
-				 console.log('header inside');
-				 }*/
+
 			}
 			console.log(options);
 			$scope.options = options;
@@ -213,7 +204,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 			alert("Network seems offside :/" + error.code + error.message)
 		}
 	});*/
-    var restCategs = RestService.get({ id: $scope.id }, function() {
+    var restCategs = RestService.url('Interests').get({ id: $scope.id }, function() {
     	console.log('rest ran');
     	console.log(restCategs.results);
     	menuDisplay(restCategs.results);
