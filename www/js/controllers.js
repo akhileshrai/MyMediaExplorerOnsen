@@ -167,7 +167,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 			for (var i = 0; i < results.length; i++) {
 				interest_checked = {};
 				interest_checked.Interest = results[i].Interest;
-				interest_checked.isChecked = (userInterests.indexOf(results[i].objectId) > -1);
+				interest_checked.isChecked = (userInterests.indexOf(results[i].objectId) > -1) ? 'checked':'';
 				console.log(results[i].objectId, userInterests.indexOf(results[i].objectId), interest_checked.isChecked);
 
 				

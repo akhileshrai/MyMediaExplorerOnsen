@@ -27,8 +27,8 @@
                     <ons-list style="margin-top: 0px;">
                         <ons-list-title class="col">{{categName}}</ons-list-title>
                         <ons-list-item ng-repeat="interest in categInfo" >
-                            <span style="color: #666">{{interest.isChecked}}</span>
-                            <ons-switch modifier="list-item" var="{{interest.Interest}}"></ons-switch>
+                            <span style="color: #666">{{interest.Interest}}</span>
+                            <ons-switch modifier="list-item" var="{{interest.Interest}}" checked="{{interest.isChecked}}"></ons-switch>
                         </ons-list-item>
                     </ons-list>	
                 </ons-row>
