@@ -30,16 +30,22 @@ mediaApp.factory('RestService', function($resource, User){
 	var user=User.current();
 	///1/classes/<className>/<objectId>
 	return { 
-		url: function (url, callback) {
+		url: function (url, whereField, includeField, keys, callback) {
 ;			return $resource('https://api.parse.com/1/classes/'+url , null, {
-            	get: {
+            	'get': {
             	//method: 'GET',
 	                headers: {
 	                    'X-Parse-Application-Id': appId,
 	                    'X-Parse-REST-API-Key': restKey,
 	                    'X-Parse-Session-Token': user.sessionToken                    
 	                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+	                },
+	                params: {
+	                	where:whereField,
+	                	include:includeField,
+	                	keys:keys
 	                }
+	                
             	},
             	'post': {
 	            	method: 'POST',
@@ -103,6 +109,7 @@ mediaApp.factory('User', function($q, LoginService){
 			outigoer.profilePicture=localStorage.getItem('profilePicture');
 			outigoer.name = localStorage.getItem('name');
 			outigoer.sessionToken = localStorage.getItem('sessionToken');
+			outigoer.objectId = localStorage.getItem('objectId');
 			return outigoer;
 		},
 		loggedInCheck: function() {
@@ -115,6 +122,8 @@ mediaApp.factory('User', function($q, LoginService){
 			localStorage.removeItem('profilePicture');
 			localStorage.removeItem('name');
 			localStorage.removeItem('sessionToken');
+			localStorage.removeItem('objectId');
+
 			console.log('logged outish');},
 		logIn: function(){
 			var fbLogged = new $q.defer();//Parse.Promise();
@@ -158,6 +167,8 @@ mediaApp.factory('User', function($q, LoginService){
 							};
 				var loggedInRest = LoginService.post(authData, function(response){ 
 					localStorage.setItem('sessionToken', response.sessionToken);
+					localStorage.setItem('objectId', response.objectId);
+
 					console.log(response);
 				});
 				

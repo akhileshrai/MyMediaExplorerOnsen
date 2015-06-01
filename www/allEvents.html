@@ -1,4 +1,4 @@
-<ons-page ng-controller="createEvent">
+<ons-page ng-controller="allEvents">
     <ons-toolbar >
         <div class="left">
           <ons-toolbar-button ng-click="menu.toggle()">
@@ -10,20 +10,16 @@
             <ons-icon icon="ion-gear-a" size="28px" fixed-width="false"></ons-icon>
           </ons-toolbar-button>
         </div>
-        <div class="center">The Creator!</div>
+        <div class="center">All Events</div>
     </ons-toolbar>
     
     <body> 
-		
-		<select ng-model="selectedItem" ng-options="interest.Interest for interest in interests track by interest.objectId">
-	    </select>
-
-    	<form name="createEventForm">
-    		<label>Event brief:	
-    			<input class="text-input" ng-model="eventDescription" ng-minlength="3" ng-maxlength="10"></input> 
-    		</label>
-    	</form>
-    		<ons-button modifier="large" ng-click="createEvent()">Create this Event</ons-button>
-    	
+    	<ons-list style="margin-top: 0px;">
+	    	<ons-list-item ng-repeat="event in myEvents"><h3>{{event.Description}}</h3>
+	    		<div ng-repeat="creator in event.Creators">{{creator.name}}</div>
+	    		<div>{{event.Interest.Category}}</div>
+	    		<div>{{event.Interest.Interest}}</div>
+	    	</ons-list-item>
+    	</ons-list>
     </body>
 </ons-page>

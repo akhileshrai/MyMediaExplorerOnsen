@@ -136,7 +136,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 	console.log("controller user:");
 	$scope.loggedIn = User.loggedInCheck();
 
-	if (!loggedIn){
+	if (!$scope.loggedIn){
 		console.log('got here but didnt do shit');
 		navOut.pushPage('login.html');
 	}
@@ -160,7 +160,25 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 				interests : [],
 				toggle : ''
 			};
+			var interest_checked = {};
+			var userInterests = ['cWc2U2KyxF', 'FIw22r3BHA'];
+			
+			var formatted = {};
 			for (var i = 0; i < results.length; i++) {
+				interest_checked = {};
+				interest_checked.Interest = results[i].Interest;
+				interest_checked.isChecked = (userInterests.indexOf(results[i].objectId) > -1);
+				console.log(results[i].objectId, userInterests.indexOf(results[i].objectId), interest_checked.isChecked);
+
+				
+				if (! (results[i].Category in formatted)){
+					formatted[results[i].Category]= [interest_checked];
+				}
+				else {
+					formatted[results[i].Category].push(interest_checked);
+				}
+				
+				/*
 
 				if (categ != results[i].Category) {
 					menu = {
@@ -172,7 +190,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 
 					//START NEW CATEGORY
 					interest_array = [];
-					menu.title.push(results[i].Category)
+					menu.title.push(results[i].Category);
 					categcount += 1;
 					categ = results[i].Category;
 
@@ -191,12 +209,16 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 
 				console.log(menu)
 
-				options[categcount] = menu;
+				options[categcount] = menu;*/
 
 
 			}
-			console.log(options);
-			$scope.options = options;
+			//console.log(options);
+			console.log(formatted);
+			//$scope.options = options;
+			$scope.options = formatted;
+			
+			Football.setChecked(true);
 
 			//$scope.$apply();
 		};/*,
@@ -261,16 +283,121 @@ mediaApp.controller('restCtrl', function restCtrl($scope, RestService) {
 });
 
 
-mediaApp.controller('createCtrl', function restCtrl($scope, RestService) {
+mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) {
 	console.log('Create Controller Entered');
+	var outigoer = User.current();
 	
-	var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing', 'blah':'blah'};
-	var result = RestService.url('Events').post(tosave, function() {
-		console.log ('Saving Event:');
+	//var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing', 'blah':'blah'};
+	//{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}
+	//-d '{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}' \
+	// Creator (r),  Description, Interest (R), Location, Map, Type, eventDate, 
+	//var userRelation =  {"__op":"AddRelation", "objects":[{"__type":"Pointer","className":"_User", "objectId":"0LxcyWcbvv" }]};
+	
+	var keys = 'Interest,Category';
+	
+	Array.prototype.unique = function() {
+	    var unique = [];
+	    for (var i = 0; i < this.length; i++) {
+	        if (unique.indexOf(this[i]) == -1) {
+	            unique.push(this[i]);
+	        }
+	    }
+	    return unique;
+	};
+	
+	
+	var restCategs = RestService.url('Interests',null,null,keys).get({ id: $scope.id }, function() {
+    	console.log('rest ran');
+    	console.log(restCategs.results);
+	  	/*var interests = restCategs.results;
+	  	var categories = [];
+	  	//interests = interests.unique2();
+	  	console.log(interests);
+	  	var interestObject = [];
+	  	//var interest = new Object;
+		for (var i = 0; i<interests.length; i++) {
+			interestObject.value = interests[i].objectId;
+			interestObject.interest = interests[i].Interest;
+			categories.push(interestObject);
+		}*/
+		$scope.interests = restCategs.results;
+		
+		
+		
+  	
+  	});
+	
+	
+	$scope.selectedItem = "Sports";
+
+	$scope.createEvent = function() {
+		console.log($scope.eventDescription);
+		//console.log($scope.selectedItem.Interest, $scope.selectedItem.objectId);
+		var eventDesc = $scope.eventDescription;
+		var userArray =  {"__op":"Add", "objects":[{"__type":"Pointer","className":"_User", "objectId":outigoer.objectId }]};
+		var interestRelation = {"__type":"Pointer","className":"Interests", "objectId":$scope.selectedItem.objectId };
+		var tosave = {'Creators':userArray, 'Description':$scope.eventDescription,'Interest': interestRelation}; 
+		//console.log(tosave);
+		//console.log (eventDesc);
+		
+		var result = RestService.url('Events').post(tosave, function() {
+			console.log ('Saving Event:');
+	    	console.log(result);
+		});
+	};
+
+	
+});
+
+mediaApp.controller('myEvents', function restCtrl($scope, RestService, User) {
+	console.log('My Events Entered');
+	var outigoer = User.current();
+	console.log(outigoer);
+	//var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing', 'blah':'blah'};
+	//{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}
+	//-d '{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}' \
+	// Creator (r),  Description, Interest (R), Location, Map, Type, eventDate, 
+	
+	//var getRelation =  '{"$relatedTo":{"object":{"__type":"Pointer","className":"Interest","objectId":"IOf48bKdFY"},"key":"Interest"}}';
+	//var getRelation =  '{"Creator":{"__type":"Pointer","className":"_User","objectId":"'+outigoer.objectId+'"}}';
+	
+	
+	
+	
+	var whereFilter = '{"Creators":{"__type":"Pointer","className":"_User","objectId":"'+outigoer.objectId+'"}}'; 
+	var includeFields = 'Creators,Interest';
+	var keys = 'Description,Creators.name,Interest.Interest,Interest.Category';
+	//var interestRelation = {"__op":"AddRelation", "objects":[{"__type":"Pointer","className":"Interests", "objectId":"IOf48bKdFY" }]};
+	//var tosave = {'Creator':userRelation, 'Description':'This is the event','Interest': interestRelation}; 
+	var result = RestService.url('Events', whereFilter, includeFields, keys).get(function() {
+		console.log ('Relation found:'+ outigoer.objectId);
     	console.log(result);
+    	$scope.myEvents = result.results;
+    	
 	});	
 	
 	
 });
+mediaApp.controller('allEvents', function restCtrl($scope, RestService, User) {
+	console.log('All Events Entered');
+	var outigoer = User.current();
+	console.log(outigoer);
+	
 
+	
+	var whereFilter = '';//'{"Creators":{"$nin":[{"__type":"Pointer","className":"_User","objectId":"'+outigoer.objectId+'" }]}}';
+	
+	var includeFields = 'Creators,Interest';
+	var keys = 'Description,Creators.name,Interest.Interest,Interest.Category';
+	//var interestRelation = {"__op":"AddRelation", "objects":[{"__type":"Pointer","className":"Interests", "objectId":"IOf48bKdFY" }]};
+	//var tosave = {'Creator':userRelation, 'Description':'This is the event','Interest': interestRelation}; 
+	var result = RestService.url('Events', whereFilter, includeFields, keys).get(function() {
+		console.log ('Relation found:'+ outigoer.objectId);
+    	console.log(result);
+    	$scope.myEvents = result.results;
+    	
+	});	
+	
+	
+});
 

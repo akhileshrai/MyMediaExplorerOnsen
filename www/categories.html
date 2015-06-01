@@ -21,16 +21,16 @@
     <body ng-show="loggedIn">
     	      <ons-button onclick="navOut.pushPage('login.html')">Push</ons-button>
         <ons-list style="margin-top: 0px;">
-            <ons-list-item ng-repeat="categ in options" >
+            <ons-list-item ng-repeat="(categName, categInfo) in options" >
                 <!--<ons-list-header ng-if="header!=interest.get('Category')">{{header = interest.get('Category')}}</ons-list-header>-->
                 <ons-row>
                     <ons-list style="margin-top: 0px;">
-                        <ons-list-title class="col">{{categ.title[0]}}</ons-list-title>
-                        <ons-list-item ng-repeat="interest in categ.interests[0]" >
-                            <span style="color: #666">{{interest.checked}}</span>
-                            <ons-switch modifier="list-item" checked="{{interest.checked}}" var="{{interest.name}}"></ons-switch>
+                        <ons-list-title class="col">{{categName}}</ons-list-title>
+                        <ons-list-item ng-repeat="interest in categInfo" >
+                            <span style="color: #666">{{interest.isChecked}}</span>
+                            <ons-switch modifier="list-item" var="{{interest.Interest}}"></ons-switch>
                         </ons-list-item>
-                    </ons-list>
+                    </ons-list>	
                 </ons-row>
             </ons-list-item>
         </ons-list>

@@ -19,11 +19,29 @@
 	
 		<ons-list-item 
 	            ng-click="
-	            navOut.pushPage('eventcreator.html', {animation: 'none'} );
+	            navOut.pushPage('eventCreator.html', {animation: 'none'} );
 	            menu.toggleMenu();	
 	            "> 
 			<i class="fa fa-gear fa-lg" style="color: #666"></i>
-			&nbsp; ADD EVENT
+			&nbsp; Add Event
+		</ons-list-item>
+
+		<ons-list-item 
+	            ng-click="
+	            navOut.pushPage('myEvents.html', {animation: 'none'} );
+	            menu.toggleMenu();	
+	            "> 
+			<i class="fa fa-gear fa-lg" style="color: #666"></i>
+			&nbsp; My Events
+		</ons-list-item>
+		
+		<ons-list-item 
+	            ng-click="
+	            navOut.pushPage('allEvents.html', {animation: 'none'} );
+	            menu.toggleMenu();	
+	            "> 
+			<i class="fa fa-gear fa-lg" style="color: #666"></i>
+			&nbsp; All Events
 		</ons-list-item>
 		
 		<ons-list-item 
