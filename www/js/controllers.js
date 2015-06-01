@@ -147,6 +147,8 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 
 
 	var menuDisplay =	function(results) {
+		
+			console.log(results);
 			$scope.resultQuery = 'Results length:' + results.length;
 			$scope.interests = results;
 			var categcount = -1;
@@ -178,38 +180,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 					formatted[results[i].Category].push(interest_checked);
 				}
 				
-				/*
 
-				if (categ != results[i].Category) {
-					menu = {
-						id : 0,
-						title : [],
-						interests : [],
-						toggle : ''
-					};
-
-					//START NEW CATEGORY
-					interest_array = [];
-					menu.title.push(results[i].Category);
-					categcount += 1;
-					categ = results[i].Category;
-
-					//console.log(categ);
-					//options[i]['Interests'].push(results[i].attributes.Interest);
-				}
-				interest_array.push({
-					name : results[i].Interest,
-					checked : check
-				});
-				//menu.interests.checked=categcount%2;
-				menu.interests[0] = (interest_array);
-				menu.id = (results[i].Id);
-				menu.toggle = false;
-				check = '';
-
-				console.log(menu)
-
-				options[categcount] = menu;*/
 
 
 			}
@@ -218,7 +189,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 			//$scope.options = options;
 			$scope.options = formatted;
 			
-			Football.setChecked(true);
+			//Football.setChecked(true);
 
 			//$scope.$apply();
 		};/*,
@@ -226,17 +197,22 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 			alert("Network seems offside :/" + error.code + error.message)
 		}
 	});*/
-    var restCategs = RestService.url('Interests').get({ id: $scope.id }, function() {
+    var restCategs = RestService.url('Interests').get({}, function() {
     	console.log('rest ran');
-    	console.log(restCategs.results);
-    	menuDisplay(restCategs.results);
+    	//console.log(restCategs);
+    	//menuDisplay(restCategs.results);
   	});
+  	
+  	//console.log($scope.restCategs);
+  	restCategs.$promise.then(function (value) {  });
+  	
+  	var userPref = RestService.url('User').get({}, function() {
 
 
 
 });
 
-mediaApp.controller('LoginCtrl', function LoginCtrl($scope, LoginService, User) {
+mediaApp.controller('LoginCtrl', function LoginCtrl($scope, User) {
 
 	
 	if (!$scope.user) {

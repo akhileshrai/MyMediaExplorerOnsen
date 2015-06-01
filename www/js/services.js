@@ -84,7 +84,7 @@ mediaApp.factory('RestService', function($resource, User){
 	
 });
 
-mediaApp.factory('LoginService', function($resource){
+mediaApp.factory('userService', function($resource){
 	var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
 	var clientKey = 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L';
 	var javaKey = 'xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous';
@@ -96,12 +96,19 @@ mediaApp.factory('LoginService', function($resource){
             	'X-Parse-Application-Id': appId,
             	'X-Parse-REST-API-Key': restKey
         	}
+		},
+		'get': {
+        	method: 'POST',
+        	headers: {
+            	'X-Parse-Application-Id': appId,
+            	'X-Parse-REST-API-Key': restKey
+        	}
 		}
     });
 	
 	
 });
-mediaApp.factory('User', function($q, LoginService){
+mediaApp.factory('User', function($q, userService){
 	var outigoer = new Object;
 	
 	return {
@@ -165,7 +172,7 @@ mediaApp.factory('User', function($q, LoginService){
 									}
 								}
 							};
-				var loggedInRest = LoginService.post(authData, function(response){ 
+				var loggedInRest = userService.post(authData, function(response){ 
 					localStorage.setItem('sessionToken', response.sessionToken);
 					localStorage.setItem('objectId', response.objectId);
 
