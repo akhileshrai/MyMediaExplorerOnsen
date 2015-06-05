@@ -130,15 +130,19 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 });
 
 
-mediaApp.controller('Categories', function($scope, User, RestService) {
+mediaApp.controller('Categories', function($scope, User, UserService, RestService) {
  
 
 	console.log("controller user:");
 	$scope.loggedIn = User.loggedInCheck();
+	
 
 	if (!$scope.loggedIn){
 		console.log('got here but didnt do shit');
 		navOut.pushPage('login.html');
+	}
+	else {
+		$scope.user = User.current();
 	}
 	
 	
@@ -169,7 +173,8 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 			for (var i = 0; i < results.length; i++) {
 				interest_checked = {};
 				interest_checked.Interest = results[i].Interest;
-				interest_checked.isChecked = (userInterests.indexOf(results[i].objectId) > -1) ? 'checked':'';
+				interest_checked.objectId = results[i].objectId; 
+				interest_checked.isChecked = (userInterests.indexOf(results[i].objectId) > -1) ? true:false;//'checked':'';
 				console.log(results[i].objectId, userInterests.indexOf(results[i].objectId), interest_checked.isChecked);
 
 				
@@ -200,13 +205,58 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
     var restCategs = RestService.url('Interests').get({}, function() {
     	console.log('rest ran');
     	//console.log(restCategs);
-    	//menuDisplay(restCategs.results);
+    	menuDisplay(restCategs.results);
   	});
   	
-  	//console.log($scope.restCategs);
-  	restCategs.$promise.then(function (value) {  });
   	
-  	var userPref = RestService.url('User').get({}, function() {
+  	$scope.submitChanges = function() {
+  		console.log($scope.options);
+  		var options = $scope.options;
+  		var userInterestsChanged = [];
+  		for (var categIndex in options) {
+  			
+  			var interestObject = options[categIndex];
+  			for (var interestIndex in interestObject) {
+  				var interestNew = interestObject [interestIndex];
+  				if (interestNew.isChecked) {
+  					userInterestsChanged.push(interestNew.objectId);
+  				}
+  				
+  			}
+  			
+  		
+  		}
+  		console.log(userInterestsChanged);
+  		
+  		//var parsePrefs = {"userPrefs":{"__op":"AddUnique","objects":userInterestsChanged}};
+  		//var parsePrefs = {"userPrefs":userInterestsChanged};
+  		var parsePrefs = {"email":"akhileshrai@hotmail.com"};
+  		
+  		
+  		var userPref = User.url($scope.user.objectId, null,null,null).post(parsePrefs, function() {
+  			console.log(userPref);
+  		});
+  		
+  		var parsePrefs = User.url($scope.user.objectId, null,null,'userPrefs').get({}, function() {
+	  		console.log(parsePrefs);
+	  	});
+  				
+  		
+  		userPref.$promise.then (function (value){
+  		
+	  		var userPrefs = User.url($scope.user.objectId, null,null,'userPrefs').get({}, function() {
+	  			console.log(userPrefs);
+	  		});
+  				
+  		});
+  		
+  		
+  		
+  	};
+  	//console.log($scope.restCategs);
+  	//restCategs.$promise.then(function (value) {  });
+  	
+  	
 
 
 

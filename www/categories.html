@@ -21,19 +21,28 @@
     <body ng-show="loggedIn">
     	      <ons-button onclick="navOut.pushPage('login.html')">Push</ons-button>
         <ons-list style="margin-top: 0px;">
-            <ons-list-item ng-repeat="(categName, categInfo) in options" >
+            <ons-list-item ng-repeat="categ in options" >
                 <!--<ons-list-header ng-if="header!=interest.get('Category')">{{header = interest.get('Category')}}</ons-list-header>-->
                 <ons-row>
                     <ons-list style="margin-top: 0px;">
-                        <ons-list-title class="col">{{categName}}</ons-list-title>
-                        <ons-list-item ng-repeat="interest in categInfo" >
+                        <ons-list-title class="col">{{categ.categName}}</ons-list-title>
+                        <ons-list-item ng-repeat="interest in categ" >
                             <span style="color: #666">{{interest.Interest}}</span>
-                            <ons-switch modifier="list-item" var="{{interest.Interest}}" checked="{{interest.isChecked}}"></ons-switch>
+                            <!--<ons-switch modifier="list-item" var="{{interest.Interest}}" checked="{{interest.isChecked}}"></ons-switch>-->
+                              <label class="switch">
+							      <input ng-model="interest.isChecked" type="checkbox" class="switch__input" checked>
+							            <div class="switch__toggle"></div>
+							
+							  </label>
+                            
+                            
                         </ons-list-item>
                     </ons-list>	
                 </ons-row>
             </ons-list-item>
         </ons-list>
+         <ons-button ng-click="submitChanges()">Changes status</ons-button>
+         <div>{{options}}</div>
     </body>
 </ons-page>
 

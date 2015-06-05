@@ -84,11 +84,12 @@ mediaApp.factory('RestService', function($resource, User){
 	
 });
 
-mediaApp.factory('userService', function($resource){
-	var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
+mediaApp.factory('UserService', function($resource){
+		var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
 	var clientKey = 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L';
 	var javaKey = 'xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous';
 	var restKey = 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn';
+
 	return $resource('https://api.parse.com/1/users', null, {
 		'post': {
         	method: 'POST',
@@ -102,16 +103,51 @@ mediaApp.factory('userService', function($resource){
         	headers: {
             	'X-Parse-Application-Id': appId,
             	'X-Parse-REST-API-Key': restKey
+            	
         	}
 		}
     });
 	
 	
 });
-mediaApp.factory('User', function($q, userService){
+mediaApp.factory('User', function($q, UserService, $resource){
 	var outigoer = new Object;
+	var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
+	var clientKey = 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L';
+	var javaKey = 'xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous';
+	var restKey = 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn';
 	
 	return {
+		
+		
+		url: function (url, whereField, includeField, keys, callback) {
+			//return $resource('https://api.parse.com/1/classes/'+url , null, {
+			return $resource('https://api.parse.com/1/classes/_User/'+url, null, {
+				'post': {
+		        	method: 'POST',
+		        	headers: {
+		            	'X-Parse-Application-Id': appId,
+		            	'X-Parse-REST-API-Key': restKey,
+	                    'X-Parse-Session-Token': outigoer.sessionToken                    
+		        	}
+				},
+				'get': {
+		        	method: 'GET',
+		        	headers: {
+		            	'X-Parse-Application-Id': appId,
+		            	'X-Parse-REST-API-Key': restKey,
+	                    'X-Parse-Session-Token': outigoer.sessionToken                    
+
+		        	},
+		        	params: {
+	                	where:whereField,
+	                	include:includeField,
+	                	keys:keys
+	                }
+				}
+		    });
+		    },
+
 		current: function(){
 			outigoer.profilePicture=localStorage.getItem('profilePicture');
 			outigoer.name = localStorage.getItem('name');
@@ -172,7 +208,7 @@ mediaApp.factory('User', function($q, userService){
 									}
 								}
 							};
-				var loggedInRest = userService.post(authData, function(response){ 
+				var loggedInRest = UserService.post(authData, function(response){ 
 					localStorage.setItem('sessionToken', response.sessionToken);
 					localStorage.setItem('objectId', response.objectId);
 
