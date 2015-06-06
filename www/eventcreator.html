@@ -13,17 +13,18 @@
         <div class="center">The Creator!</div>
     </ons-toolbar>
     
-    <body> 
+    <body >
+    	<div ng-show="submitReady">
 		
-		<select ng-model="selectedItem" ng-options="interest.Interest for interest in interests track by interest.objectId">
-	    </select>
+			<select ng-model="selectedItem" ng-options="interest.Interest for interest in interests track by interest.objectId"></select>
+	
+	    	<form name="createEventForm">
+	    		<label>Event brief:	
+	    			<input class="text" name="eventDescription" ng-model="eventDescription" ng-minlength="3" ng-maxlength="10" required></input> 
+	    		</label>
+	    		<input type="submit" value="Create Event"  ng-disabled="createEventForm.eventDescription.$dirty && createEventForm.eventDescription.$invalid">
+	    	</form>
 
-    	<form name="createEventForm">
-    		<label>Event brief:	
-    			<input class="text-input" ng-model="eventDescription" ng-minlength="3" ng-maxlength="10"></input> 
-    		</label>
-    	</form>
-    		<ons-button modifier="large" ng-click="createEvent()">Create this Event</ons-button>
-    	
+    	</div>
     </body>
 </ons-page>
