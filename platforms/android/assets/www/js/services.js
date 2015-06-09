@@ -1,245 +1,6 @@
 'use strict';
 
 /* Services */
-mediaApp.factory('MediaService', function($resource, $q){
-    var music = $resource('https://itunes.apple.com/:action',
-        { action: "search", callback: 'JSON_CALLBACK'},
-        { 'get':  {method: 'JSONP'} });
-
-
-    return {
-        search: function(query,type,limit) {
-            var q = $q.defer();
-
-            music.get({
-                term: query, media: type, limit: limit
-            }, function(resp) {
-                q.resolve(resp);
-            }, function(err) {
-                q.reject(err);
-            })
-
-            return q.promise;
-        }
-    }
-})
-// Shared data from settings needed by different controllers
-mediaApp.service('SettingsService', function() {
-    var _variables = {};
-
-    return {
-        get: function(varname) {
-            return (typeof _variables[varname] !== 'undefined') ? _variables[varname] : false;
-        },
-        set: function(varname, value) {
-            _variables[varname] = value;
-        }
-    };
-});
-
-mediaApp.factory('ParseService', function($resource){
-    // Initialize Parse API and objects.
-    //Parse.initialize("14NbAp0dn849XjcDuhxo6MAFNv73CA2DQ2e6OV9E", "JFP3EqjW2S0BUOiunPi344o5IbUDH5G4lBaJYxbS");
-    Parse.initialize("ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire", "xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous");
-
-    // Cache current logged in user
-    var loggedInUser;
-
-    // Cache list of user's books
-    var myBooks = [];
-
-    // Define parse model and collection for Book records
-    var Book = Parse.Object.extend("Book");
-    var BookCollection = Parse.Collection.extend({ model:Book });
-
-    // Define parse model and collection for BookRequest records
-    var BookRequest = Parse.Object.extend("BookRequest");
-
-    /**
-     * ParseService Object
-     * This is what is used by the controllers to save and retrieve data from Parse.com.
-     * Moving all the Parse.com specific stuff into a service allows me to later swap it out 
-     * with another back-end service provider without modifying my controller much, if at all.
-     */
-    var ParseService = {
-      name: "Parse",
-
-      // Login a user
-      login : function login(username, password, callback) {
-          Parse.User.logIn(username, password, {
-    	    success: function(user) {
-            loggedInUser = user;
-    	      callback(user);
-    	    },
-    	    error: function(user, error) {
-    	      alert("Error: " + error.message);
-    	    }
-        });
-      },
-
-      // Login a user using Facebook
-
-      // Get all public books
-      getBooks : function getBooks(callback) {
-        // Create a new Parse Query to search Book records by visibility
-        var query = new Parse.Query(Book);
-        query.equalTo("visibility", "public");
-        query.notEqualTo("owner", loggedInUser.get('username'));
-        query.descending("requestCount");
-        // use the find method to retrieve all public books
-        query.find({
-          success : function(results) {
-            callback(results);
-          },
-          error: function(error) {
-            alert("Error: " + error.message);
-          }
-        });
-      },
-
-      // Get all books belonging to logged in user
-      getMyBooks : function getMyBooks(callback) {
-        // Create a new Parse Query to search Book records by ownerid
-        var query = new Parse.Query(Book);
-        query.equalTo("owner", loggedInUser.get('username'));
-        // use the find method to retrieve all books
-        query.find({
-          success : function(results) {
-            for (var i=0; i<results.length; i++)
-            { 
-              myBooks[i]  = results[i].get('name');
-            }
-            callback(results);
-          },
-          error: function(error) {
-            alert("Error: " + error.message);
-          }
-        });
-      },
-
-      // Get all requests for current user's books
-      getRequests : function getRequests(callback) {
-        var query;
-        if (myBooks.length == 0) {
-          query = new Parse.Query(Book);
-          query.equalTo("owner", loggedInUser.get('username'));
-          // use the find method to retrieve all books
-          query.find({
-            success : function(results) {
-              for (var i=0; i<results.length; i++)
-              { 
-                myBooks[i]  = results[i].get('name');
-              }
-              // Create a new Parse Query to search requests records by ownerid
-              query = new Parse.Query(BookRequest);
-              query.notEqualTo("borrower", loggedInUser.get('username'));
-              query.containedIn("book", myBooks);
-              // use the find method to retrieve all requests
-              query.find({
-                success : function(results) {
-                  callback(results);
-                },
-                error: function(error) {
-                  alert("Error: " + error.message);
-                }	
-              });
-            },
-            error: function(error) {
-              alert("Error: " + error.message);
-            }
-          });
-        } else {
-          // Create a new Parse Query to search requests records by ownerid
-          query = new Parse.Query(BookRequest);
-          query.notEqualTo("borrower", loggedInUser.get('username'));
-          query.containedIn("book", myBooks);
-          // use the find method to retrieve all requests
-          query.find({
-            success : function(results) {
-              callback(results);
-            },
-            error: function(error) {
-              alert("Error: " + error.message);
-            }
-          });
-        }
-      },
-
-      // Creates a borrow request for the given book
-      borrow : function borrow(book, callback) {
-        // Create and save a request
-        var object = new BookRequest();
-        object.save({book: book.get('name'), borrower:loggedInUser.get('username'), status:"Pending", date_borrowed:null, date_returned:null}, {
-          success: function(object) {
-            // on success, increment the request count for the book
-            book.increment("requestCount");
-            book.save({
-              success: function(object) {
-                callback(object);
-              },
-              error: function(error) {
-                alert("Error: " + error.message);
-              }
-            });
-          },
-          error: function(error) {
-            alert("Error: " + error.message);
-          }
-        });
-      },
-      
-      // Set request status to 'Accepted' and update date borrowed
-      accept : function accept(request, callback) {
-        request.set("status", "Accepted");
-        request.set("date_borrowed", new Date());
-        request.save({
-          success: function(object) {
-            callback(object);
-          },
-          error: function(error) {
-            alert("Error: " + error.message);
-          }
-        })
-      },
-
-      // Set request status to 'Rejected' and update date borrowed
-      reject : function reject(request, callback) {
-        request.set("status", "Rejected");
-        request.save({
-          success: function(object) {
-            callback(object);
-          },
-          error: function(error) {
-            alert("Error: " + error.message);
-          }
-        })
-      },
-
-      // Create a new book record
-      addBook : function addBook(_name, _status, _visibility, _location, callback) {
-        var object = new Book();
-        object.save({name:_name, owner:loggedInUser.get('username'), status:_status, visibility:_visibility, location:_location}, {
-          success: function(object) {
-            callback();
-          },
-          error: function(error) {
-            alert("Error: " + error.message);
-          }
-        });
-      },
-
-      // Get current logged in user
-      getUser : function getUser() {
-        if(loggedInUser) {
-          return loggedInUser;
-        }
-      }
-    
-    };
-
-    // The factory function returns ParseService, which is injected into controllers.
-    return ParseService;
-});
 
 mediaApp.factory('ParseUser', function($resource){
 
@@ -248,7 +9,7 @@ mediaApp.factory('ParseUser', function($resource){
     		
 			var loggedIn = false;
 			if(Parse.User.current()) {
-		        loggedIn = true
+		        loggedIn = true;
 		    }
 	        return loggedIn;
     	}
@@ -256,7 +17,257 @@ mediaApp.factory('ParseUser', function($resource){
  
 });
 
+mediaApp.config(function($httpProvider) {
+     $httpProvider.defaults.useXDomain = true;
+       delete $httpProvider.defaults.headers
+        .common['X-Requested-With'];
+});
 
+mediaApp.factory('RestService', function($resource, User){
+	var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
+	var javaKey = 'xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous';
+	var restKey = 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn';
+	var user=User.current();
+	///1/classes/<className>/<objectId>
+	return { 
+		url: function (url, whereField, includeField, keys, callback) {
+;			return $resource('https://api.parse.com/1/classes/'+url , null, {
+            	'get': {
+            	//method: 'GET',
+	                headers: {
+	                    'X-Parse-Application-Id': appId,
+	                    'X-Parse-REST-API-Key': restKey,
+	                    'X-Parse-Session-Token': user.sessionToken                    
+	                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+	                },
+	                params: {
+	                	where:whereField,
+	                	include:includeField,
+	                	keys:keys
+	                }
+	                
+            	},
+            	'post': {
+	            	method: 'POST',
+	                headers: {
+	                    'X-Parse-Application-Id': appId,
+	                    'X-Parse-REST-API-Key': restKey
+	                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+	                }
+	            }
+            });
+		}
+	};
+            
+/*            
+            'post': {
+            	method: 'POST',
+                headers: {
+                    'X-Parse-Application-Id': appId,
+                    'X-Parse-REST-API-Key': restKey
+                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+                }
+            },
+            'query': {
+            	method: 'GET',
+   	            isArray: false, 
+                headers: {
+   	            	'X-Parse-Application-Id': appId,
+                    'X-Parse-REST-API-Key': restKey,
+                    'X-Parse-Session-Token': user.sessionToken
+                    //'X-Parse-Client-Key': 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L'
+                }
+            }
+       });*/
+	
+	
+	
+});
+/*
+mediaApp.factory('UserService', function($resource){
+		var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
+	var clientKey = 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L';
+	var javaKey = 'xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous';
+	var restKey = 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn';
 
+	return $resource('https://api.parse.com/1/users', null, {
+		'post': {
+        	method: 'POST',
+        	headers: {
+            	'X-Parse-Application-Id': appId,
+            	'X-Parse-REST-API-Key': restKey
+        	}
+		},
+		'get': {
+        	method: 'POST',
+        	headers: {
+            	'X-Parse-Application-Id': appId,
+            	'X-Parse-REST-API-Key': restKey
+            	
+        	}
+		}
+    });
+	
+	
+});*/
+mediaApp.factory('User', function($q, $resource){
+	var outigoer = new Object;
+	var appId = 'ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire';
+	var clientKey = 'cTU0uIWlMvtFK1ToyK819lwJsTLzDsaJ6QxZFP8L';
+	var javaKey = 'xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous';
+	var restKey = 'nWAWHHoIsNnDHF5GsXPserWai9qZgttYDAfUzsjn';
 
+	
+	return {
+		
+		
+		url: function (url, whereField, includeField, keys, callback) {
+			//return $resource('https://api.parse.com/1/classes/'+url , null, {
+			return $resource('https://api.parse.com/1/users/'+url, null, {
+				'post': {
+		        	method: 'POST',
+		        	headers: {
+		            	'X-Parse-Application-Id': appId,
+		            	'X-Parse-REST-API-Key': restKey
+		        	}
+				},
+				'put': {
+		        	method: 'PUT',
+		        	headers: {
+		            	'X-Parse-Application-Id': appId,
+		            	'X-Parse-REST-API-Key': restKey
+	                    , 'X-Parse-Session-Token': outigoer.sessionToken                    
+		        	}
+				},
+				'get': {
+		        	method: 'GET',
+		        	headers: {
+		            	'X-Parse-Application-Id': appId,
+		            	'X-Parse-REST-API-Key': restKey
+		            	//,'X-Parse-Session-Token': outigoer.sessionToken                    
+
+		        	},
+		        	params: {
+	                	where:whereField,
+	                	include:includeField,
+	                	keys:keys
+	                }
+				}
+		    });
+		},
+
+		current: function(){
+			outigoer.profilePicture=localStorage.getItem('profilePicture');
+			outigoer.name = localStorage.getItem('name');
+			outigoer.sessionToken = localStorage.getItem('sessionToken');
+			outigoer.objectId = localStorage.getItem('objectId');
+			outigoer.authData = localStorage.getItem('authData');
+			return outigoer;
+		},
+		loggedInCheck: function() {
+			if (outigoer.sessionToken) {
+				return true;
+			}
+			else return false;
+		},
+		logOut: function(){ 
+			localStorage.removeItem('profilePicture');
+			localStorage.removeItem('name');
+			localStorage.removeItem('sessionToken');
+			localStorage.removeItem('objectId');
+			localStorage.removeItem('authData');
+
+			console.log('logged outish');},
+		logIn: function(){
+			var self = this;
+			/*var fbLogged = new $q.defer();//Parse.Promise();
+			
+			fbLogged.promise.then(function() {
+					console.log('setting picture');
+
+					facebookConnectPlugin.api('/me', null, function(response) {
+						localStorage.setItem('name', response.name);
+					}, function(error) {console.log(error);	});
+					
+					facebookConnectPlugin.api('/me/picture', null, function(response) {
+						localStorage.setItem('profilePicture', response.data.url);
+					}, function(error) {console.log(error);});
+					
+					setTimeout(function() {
+						navOut.popPage();   
+					}, 1000);
+		
+				}, function(error) {
+					//console.log(error);
+					return error;
+			});*/
+			 
+			var fbLoginSuccess = function(response) {
+				if (!response.authResponse) {
+					fbLoginError("Cannot find the authResponse");
+					//outigoer.authdata="cannot find the authresponse";
+					return;
+				}
+				var expDate = new Date(new Date().getTime() + response.authResponse.expiresIn * 1000).toISOString();
+		        
+		        var authData = new String;
+		
+				authData =	{
+								authData: { 
+									facebook:{	
+										id : String(response.authResponse.userID),	
+										access_token : response.authResponse.accessToken,	
+										expiration_date : expDate
+									}
+								},
+								userPrefs: ["hi"]
+							};
+				var loggedInRest = self.url('',null,null,null).post(authData, function(response){ 
+					localStorage.setItem('sessionToken', response.sessionToken);
+					localStorage.setItem('objectId', response.objectId);
+					localStorage.setItem('authData', 'Step 1 Reached');
+					
+					
+					console.log('yes this works too');
+					
+					facebookConnectPlugin.api('/me', null, function(response) {
+						//localStorage.setItem('authData', 'Step 2 Reached'+ JSON.stringify(response));
+						console.log('authData', 'Step 2 Reached'+ JSON.stringify(response));
+						localStorage.setItem('name', response.name);
+					}, function(error) {console.log(error);	});
+					
+					facebookConnectPlugin.api('/me/picture', null, function(response) {
+						//localStorage.setItem('authData', 'Step 3 Reached'+ JSON.stringify(response));
+						console.log('authData', 'Step 3 Reached'+ JSON.stringify(response));
+						localStorage.setItem('profilePicture', response.data.url);
+					}, function(error) {console.log(error);});
+					
+					setTimeout(function() {
+						navOut.popPage();   
+					}, 1000);
+
+					console.log(response);
+				});
+				
+			
+				//fbLogged.resolve(loggedInRest);
+				fbLoginSuccess = null;
+				
+			
+			};
+		
+			var fbLoginError = function(error) {
+				localStorage.setItem('authData', 'fbLogin Error');
+				//fbLogged.reject(error);
+				return error;
+			};
+			facebookConnectPlugin.login(['email'], fbLoginSuccess, fbLoginError);
+		
+					
+		}
+				
+	};
+	
+	
+});
 

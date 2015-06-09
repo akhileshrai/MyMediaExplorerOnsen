@@ -22,8 +22,29 @@
 	    		<label>Event brief:	
 	    			<input class="text" name="eventDescription" ng-model="eventDescription" ng-minlength="3" ng-maxlength="10" required></input> 
 	    		</label>
-	    		<input type="submit" value="Create Event"  ng-disabled="createEventForm.eventDescription.$dirty && createEventForm.eventDescription.$invalid">
+	    		
+	    		
+	    		<label for="eventDate">Pick a date in 2013:</label>
+				<input type="date" id="eventDate" name="inputDate" ng-model="eventDate"
+				   placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
+				 <div role="alert">
+					 <span class="error" ng-show="createEventForm.inputDate.$error.required">
+					 Required!</span>
+					 <span class="error" ng-show="createEventForm.inputDate.$error.date">
+					 Not a valid date!</span>
+				</div>
+	    		<input type="button"  ng-disabled="createEventForm.eventDescription.$invalid || createEventForm.inputDate.$invalid" ng-click="createEvent()" />
+	    		
 	    	</form>
+	    	
+	    	
+ <!--
+    <tt>value = {{eventDate | date: "yyyy-MM-dd"}}</tt><br/>
+    <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
+    <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
+    <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
+    <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>-->
+</form>{{ISOdate}}
 
     	</div>
     </body>

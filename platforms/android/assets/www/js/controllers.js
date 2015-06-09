@@ -7,13 +7,13 @@ mediaApp.controller('AboutCtrl', function($scope) {
 		} else {
 			location.href = 'mailto:?subject=Question about media explorer&body=';
 		}
-	}
+	};
 
 	$scope.linkTo = function(link) {
 		console.log("Link to " + link);
 		var ref = window.open(link, '_blank', 'location=yes');
-	}
-})
+	};
+});
 
 mediaApp.controller('SettingsCtrl', function($scope, SettingsService) {
 	$scope.navTitle = "Settings";
@@ -23,11 +23,11 @@ mediaApp.controller('SettingsCtrl', function($scope, SettingsService) {
 	$scope.maxResults = 50;
 
 	$scope.changeNumResults = function() {
-		console.log("Results set to " + this.maxResults)
+		console.log("Results set to " + this.maxResults);
 		$scope.maxResults = this.maxResults;
 		SettingsService.set('maxResults', this.maxResults);
 	};
-})
+});
 
 mediaApp.controller('SearchCtrl', function($scope, MediaService, $location, SettingsService, $rootScope) {
 	$scope.request = {};
@@ -36,12 +36,12 @@ mediaApp.controller('SearchCtrl', function($scope, MediaService, $location, Sett
 	$scope.mediaTypes.type = 'all';
 
 	if (SettingsService.get('sortBy'))
-		$rootScope.sortBy = SettingsService.get('sortBy')
+		$rootScope.sortBy = SettingsService.get('sortBy');
 	else
 		$rootScope.sortBy = "artistName";
 
 	if (SettingsService.get('filterTerm'))
-		$rootScope.filterTerm = SettingsService.get('filterTerm')
+		$rootScope.filterTerm = SettingsService.get('filterTerm');
 	else
 		$rootScope.filterTerm = "";
 
@@ -70,14 +70,14 @@ mediaApp.controller('SearchCtrl', function($scope, MediaService, $location, Sett
 		if (SettingsService.get('filterTerm'))
 			$scope.filterTerm = SettingsService.get('filterTerm');
 		doSearch($scope.request.query);
-	}
+	};
 
 	$scope.checkMedia = function(item) {
 		if (item.kind === 'song' || item.kind === 'music-video') {
 			$scope.openPlayModal(item);
 			$scope.infoTxt = null;
 		} else
-			$scope.infoTxt = 'No suitable player available for the selected media type.'
+			$scope.infoTxt = 'No suitable player available for the selected media type.';
 	};
 
 	$scope.openPlayModal = function(item) {
@@ -91,12 +91,12 @@ mediaApp.controller('SearchCtrl', function($scope, MediaService, $location, Sett
 		SettingsService.set('artist', item.artistName);
 
 		$scope.ons.screen.presentPage('playModalNav.html');
-	}
+	};
 
 	$scope.openSortModal = function() {
 		$scope.ons.screen.presentPage('sortModalNav.html');
-	}
-})
+	};
+});
 
 mediaApp.controller('PlayMediaCtrl', function($scope, SettingsService) {
 	console.log("Kind " + this.kind);
@@ -107,14 +107,14 @@ mediaApp.controller('PlayMediaCtrl', function($scope, SettingsService) {
 
 	$scope.closePlayModal = function() {
 		$scope.playModal.hide();
-	}
-})
+	};
+});
 
 mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 	$scope.filterTerm = "";
 
 	if (SettingsService.get('sortBy'))
-		$scope.sortBy = SettingsService.get('sortBy')
+		$scope.sortBy = SettingsService.get('sortBy');
 	else
 		$scope.sortBy = "artistName";
 
@@ -126,42 +126,34 @@ mediaApp.controller('SortCtrl', function($scope, SettingsService, $rootScope) {
 		SettingsService.set('filterTerm', $scope.filterTerm);
 		SettingsService.set('sortBy', $rootScope.sortBy);
 		$scope.ons.screen.dismissPage();
-	}
-})
+	};
+});
 
 
-mediaApp.controller('Categories', function($scope, ParseUser) {
+mediaApp.controller('Categories', function($scope, User, RestService) {
  
 
 	console.log("controller user:");
-	var loggedIn = ParseUser.loggedInCheck();
-	$scope.loggedIn = loggedIn;
-	//console.log(ParseUser);
-	console.log(loggedIn);
+	$scope.loggedIn = User.loggedInCheck();
+	
 
-	if (!loggedIn){
+	if (!$scope.loggedIn){
 		console.log('got here but didnt do shit');
-		//Send to login page
-		//ons.slidingMenu.setMainPage('login.html');
 		navOut.pushPage('login.html');
-
-		/*setTimeout(function() {
-            //navOut.pushPage('login.html');    
-        }, 1000);*/
+	}
+	else {
+		$scope.user = User.current();
+		console.log ($scope.user);	
 	}
 	
 	
-	//console.log("Got to this Category controller");
-	$scope.resultQuery = 'HI';
-	//$scope. = SettingsService.get('kind');
 	$scope.options = {};
 
-	var Category = Parse.Object.extend("Interests");
-	var query = new Parse.Query(Category);
 
-	//query.equalTo('Category', 'Sports');
-	query.find({
-		success : function(results) {
+
+	var menuDisplay =	function(results, userInterests) {
+		
+			console.log(results);
 			$scope.resultQuery = 'Results length:' + results.length;
 			$scope.interests = results;
 			var categcount = -1;
@@ -175,144 +167,280 @@ mediaApp.controller('Categories', function($scope, ParseUser) {
 				interests : [],
 				toggle : ''
 			};
+			var interest_checked = {};
+			
+			if (!userInterests) userInterests = [];
+			
+			var formatted = {};
 			for (var i = 0; i < results.length; i++) {
-				//header = interest.get('Category');
-				//console.log (results[i].attributes);
+				interest_checked = {};
+				interest_checked.Interest = results[i].Interest;
+				interest_checked.objectId = results[i].objectId; 
+				interest_checked.isChecked = (userInterests.indexOf(results[i].objectId) > -1) ? true:false;//'checked':'';
+				console.log(results[i].objectId, userInterests.indexOf(results[i].objectId), interest_checked.isChecked);
 
-				//console.log(menu, categcount)
-				if (categ != results[i].attributes.Category) {
-					menu = {
-						id : 0,
-						title : [],
-						interests : [],
-						toggle : ''
-					};
-
-					//START NEW CATEGORY
-					interest_array = [];
-					menu.title.push(results[i].attributes.Category)
-					categcount += 1;
-					categ = results[i].attributes.Category;
-
-					//console.log(categ);
-					//options[i]['Interests'].push(results[i].attributes.Interest);
+				
+				if (! (results[i].Category in formatted)){
+					formatted[results[i].Category]= [interest_checked];
 				}
-				interest_array.push({
-					name : results[i].attributes.Interest,
-					checked : check
-				})
-				//menu.interests.checked=categcount%2;
-				menu.interests[0] = (interest_array);
-				menu.id = (results[i].attributes.Id);
-				menu.toggle = false;
-				check = '';
+				else {
+					formatted[results[i].Category].push(interest_checked);
+				}
+				
 
-				console.log(menu)
 
-				options[categcount] = menu;
 
-				/*while (header!=interest["Category"]) {
-				 console.log('header inside');
-				 }*/
 			}
-			console.log(options);
-			$scope.options = options;
+			//console.log(options);
+			console.log(formatted);
+			//$scope.options = options;
+			$scope.options = formatted;
+			
+			//Football.setChecked(true);
 
-			$scope.$apply();
-		},
+			//$scope.$apply();
+		};/*,
 		error : function(error) {
 			alert("Network seems offside :/" + error.code + error.message)
 		}
-	})
+	});*/
+    var restCategs = RestService.url('Interests').get({}, function() {
+    	console.log('rest ran');
+    	//console.log(restCategs);
+    	
+  	});
+  	
+  	restCategs.$promise.then (function (value){
+  		
+	  		var userPrefs = User.url($scope.user.objectId, null,null,'userPrefs').get({}, function() {
+	  			console.log(userPrefs, restCategs);
+	  			menuDisplay(restCategs.results, userPrefs.userPrefs);
+	  		});
+  				
+  		});
+  	
+  	
+  	$scope.submitChanges = function() {
+  		console.log($scope.options);
+  		var options = $scope.options;
+  		var userInterestsChanged = [];
+  		for (var categIndex in options) {
+  			
+  			var interestObject = options[categIndex];
+  			for (var interestIndex in interestObject) {
+  				var interestNew = interestObject [interestIndex];
+  				if (interestNew.isChecked) {
+  					userInterestsChanged.push(interestNew.objectId);
+  				}
+  				
+  			}
+  			
+  		
+  		}
+  		
+  		var parsePrefs = {"userPrefs":userInterestsChanged};
 
-})
+  		
+  		
+  		var userPref = User.url($scope.user.objectId, null,null,null).put(parsePrefs, function() {
+  			console.log(userPref);
+  		});
+  		
 
-mediaApp.controller('LoginCtrl', function LoginCtrl($scope) {
-	console.log('hi ctrl');
-	var fbLogged = new Parse.Promise();
+  		
+  		
+  		
+  	};
+
+  	
+  	
+
+
+
+});
+
+mediaApp.controller('LoginCtrl', function LoginCtrl($scope, User) {
+
+	$scope.loginStatus = "Status Here";
+       
 	if (!$scope.user) {
-		console.log('user is blank so assigning parse')
-		$scope.user = Parse.User.current();
-		console.log(Parse.User.current());
+		console.log('user is blank so assigning parse');
+		//$scope.user = Parse.User.current();
+		$scope.user = User.current();
+		console.log(User.current());
 
 	
 	}
-	
-	var fbLoginSuccess = function(response) {
-		if (!response.authResponse) {
-			fbLoginError("Cannot find the authResponse");
-			return;
-		}
-		var expDate = new Date(new Date().getTime() + response.authResponse.expiresIn * 1000).toISOString();
 
-		var authData = {
-			id : String(response.authResponse.userID),
-			access_token : response.authResponse.accessToken,
-			expiration_date : expDate
-		}
-		fbLogged.resolve(authData);
-		fbLoginSuccess = null;
-		console.log(authData);
-		console.log('finished getting fb data');
-	};
-
-	var fbLoginError = function(error) {
-		fbLogged.reject(error);
-	};
 
 	$scope.FB_login = function() {
-		console.log('Login');
-		console.log(navOut.getPages());
-		if (!window.cordova) {
-			//facebookConnectPlugin.browserInit('353205054847621');
-		}
-		facebookConnectPlugin.login(['email'], fbLoginSuccess, fbLoginError);
-
-		fbLogged.then(function(authData) {
-			console.log('Promised');
-			return Parse.FacebookUtils.logIn(authData);
-		}).then(function(userObject) {
-			var authData = userObject.get('authData');
-			facebookConnectPlugin.api('/me', null, function(response) {
-				userObject.set('name', response.name);
-				userObject.set('email', response.email);
-				userObject.save();
-				console.log('received email and name')
-				
-			}, function(error) {
-				console.log(error);
-			});
-			facebookConnectPlugin.api('/me/picture', null, function(response) {
-				console.log('getting picture');
-				userObject.set('profilePicture', response.data.url);
-				userObject.save();
-				$scope.user = Parse.User.current();
-				$scope.$apply();
-				console.log(Parse.User.current());
-
-				console.log('applying to scope')
-			}, function(error) {console.log(error);}
-			);
-			setTimeout(function() {
-				navOut.popPage();   
-				console.log(navOut.getPages());
-			}, 1000);
-
-		}, function(error) {
-			console.log(error);
-		});
+		$scope.loginStatus = User.logIn();
+		console.log("Current USer");
+		$scope.user = User.current();
+		//$scope.$apply();
+		console.log($scope.user);
 		
-		//console.log(userObject);
-		console.log(Parse.User.current());
-	
+
+		
 	};
 	$scope.logout = function() {
           console.log('Logout');
-          Parse.User.logOut();
+          User.logOut();
           $scope.user = null;
     };
     
 
 
+});
+
+mediaApp.controller('restCtrl', function restCtrl($scope, RestService) {
+	console.log(RestService);
+	
+	var entry = RestService.url('Interests').get(function() {
+    	console.log ('Entry:');
+    	console.log(entry);
+  	});
+	console.log('rest api testing begins!');
+	
+
+	
+});
+
+
+mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) {
+	console.log('Create Controller Entered');
+	var outigoer = User.current();
+	$scope.submitReady = false; 
+	
+	$scope.eventDate = new Date(2013, 9, 22);
+       
+    //$scope.ISOdate = ;
+    //$scope.eventDescription = "A";
+	
+	//var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing', 'blah':'blah'};
+	//{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}
+	//-d '{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}' \
+	// Creator (r),  Description, Interest (R), Location, Map, Type, eventDate, 
+	//var userRelation =  {"__op":"AddRelation", "objects":[{"__type":"Pointer","className":"_User", "objectId":"0LxcyWcbvv" }]};
+	
+	var keys = 'Interest,Category';
+	
+	Array.prototype.unique = function() {
+	    var unique = [];
+	    for (var i = 0; i < this.length; i++) {
+	        if (unique.indexOf(this[i]) == -1) {
+	            unique.push(this[i]);
+	        }
+	    }
+	    return unique;
+	};
+	
+	
+	var restCategs = RestService.url('Interests',null,null,keys).get({ id: $scope.id }, function() {
+		$scope.interests = restCategs.results;
+		$scope.submitReady = true;
+		//$scope.$apply();
+  	});
+	
+	
+	$scope.selectedItem = "Sports";
+
+	$scope.createEvent = function() {
+		console.log($scope.eventDescription);
+		//console.log($scope.selectedItem.Interest, $scope.selectedItem.objectId);
+		var eventDesc = $scope.eventDescription;
+		var userArray =  {"__op":"Add", "objects":[{"__type":"Pointer","className":"_User", "objectId":outigoer.objectId }]};
+		var interestRelation = {"__type":"Pointer","className":"Interests", "objectId":$scope.selectedItem.objectId };
+		var eventDate = {"__type":"Date", "iso":$scope.eventDate.toISOString()};
+		var tosave = {'Creators':userArray, 'Description':$scope.eventDescription,'Interest': interestRelation, 'eventDate':eventDate}; 
+		console.log(tosave);
+		//console.log (eventDesc);
+		
+		var result = RestService.url('Events').post(tosave, function() {
+			console.log ('Saving Event:');
+	    	console.log(result);
+		});
+	};
+
+	
+});
+
+mediaApp.controller('myEvents', function restCtrl($scope, RestService, User) {
+	console.log('My Events Entered');
+	var outigoer = User.current();
+	console.log(outigoer);
+	//var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing', 'blah':'blah'};
+	//{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}
+	//-d '{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}' \
+	// Creator (r),  Description, Interest (R), Location, Map, Type, eventDate, 
+	
+	//var getRelation =  '{"$relatedTo":{"object":{"__type":"Pointer","className":"Interest","objectId":"IOf48bKdFY"},"key":"Interest"}}';
+	//var getRelation =  '{"Creator":{"__type":"Pointer","className":"_User","objectId":"'+outigoer.objectId+'"}}';
+	
+	
+	
+	
+	var whereFilter = '{"Creators":{"__type":"Pointer","className":"_User","objectId":"'+outigoer.objectId+'"}}'; 
+	var includeFields = 'Creators,Interest';
+	var keys = 'Description,Creators.name,Interest.Interest,Interest.Category';
+	//var interestRelation = {"__op":"AddRelation", "objects":[{"__type":"Pointer","className":"Interests", "objectId":"IOf48bKdFY" }]};
+	//var tosave = {'Creator':userRelation, 'Description':'This is the event','Interest': interestRelation};
+	 
+	var result = RestService.url('Events', whereFilter, includeFields, keys).get(function() {
+		console.log ('Relation found:'+ outigoer.objectId);
+    	console.log(result);
+    	$scope.myEvents = result.results;
+    	
+	});	
+	
+	
+});
+mediaApp.controller('allEvents', function restCtrl($scope, RestService, User) {
+	console.log('All Events Entered');
+	$scope.user = User.current();
+	//console.log(outigoer);
+	
+
+	
+
+		
+	var userPrefs = User.url($scope.user.objectId, null,null,'userPrefs').get({}, function() {
+			//console.log(userPrefs, restCategs);
+  			//menuDisplay(restCategs.results, userPrefs.userPrefs);
+  		});
+			
+	
+	//var interestRelation = {"__op":"AddRelation", "objects":[{"__type":"Pointer","className":"Interests", "objectId":"IOf48bKdFY" }]};
+	//var tosave = {'Creator':userRelation, 'Description':'This is the event','Interest': interestRelation}; 
+	userPrefs.$promise.then (function (result){
+		var userPrefs = result.userPrefs;
+		var wherePrefs = [];
+		
+		for (var userPref in userPrefs) {
+			var pointerPref = {"__type":"Pointer","className":"Interests","objectId":userPrefs[userPref]};
+			//pointerPref.objectId = userPrefs[userPref];
+			//wherePrefs.push(pointerPref);
+			wherePrefs[userPref] = pointerPref;
+			//wherePrefs[userPref].objectId = userPrefs[userPref];
+			console.log(wherePrefs[userPref]);
+			
+		}
+		//var whereFilter = '{"Interest":{"__type":"Pointer","className":"Interests","objectId":"'+userPrefs.userPrefs+'"}}'; //'';//'{"Creators":{"$nin":[{"__type":"Pointer","className":"_User","objectId":"'+outigoer.objectId+'" }]}}';
+		var whereFilter = {"Interest":{"$in":wherePrefs}};
+				console.log(whereFilter);
+
+		
+		var includeFields = 'Creators,Interest';
+		var keys = 'Description,Creators.name,Interest.Interest,Interest.Category';
+		
+		
+		var result = RestService.url('Events', whereFilter, includeFields, keys).get(function() {
+			//console.log ('Relation found:'+ outigoer.objectId);
+	    	console.log(result);
+	    	$scope.myEvents = result.results;
+	    	
+		});	
+	
+	});
 });
 

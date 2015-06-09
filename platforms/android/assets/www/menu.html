@@ -1,73 +1,52 @@
-<!--  <ons-page modifier="menu-page">
-   <ons-toolbar modifier="transparent"></ons-toolbar>
-    <ons-list>
-        <ons-list-item
-                ng-click="ons.slidingMenu.toggleMenu();
-			    ons.slidingMenu.setMainPage('homeNav.html')">
-            <i class="fa fa-home fa-lg" style="color: #666"></i>
-            &nbsp; Home
-        </ons-list-item>
+<ons-page modifier="menu-page">
+<ons-toolbar modifier="transparent"></ons-toolbar>
+	<ons-list>
 
-        <ons-list-item
-                ng-click="ons.slidingMenu.toggleMenu();
-                ons.slidingMenu.setMainPage('login.html')">
-            <i class="fa fa-search fa-lg" style="color: #666"></i>
-            &nbsp; Login
-        </ons-list-item>
+	    <ons-list-item
+	            ng-click="menu.toggleMenu();
+	            navOut.pushPage('login.html', {animation: 'none'} );
+	            ">
+	        <i class="fa fa-search fa-lg" style="color: #666"></i>
+	        &nbsp; Login
+	    </ons-list-item>
+	
+		<ons-list-item 
+	            ng-click="
+	            navOut.pushPage('eventCreator.html', {animation: 'none'} );
+	            menu.toggleMenu();	
+	            "> 
+			<i class="fa fa-gear fa-lg" style="color: #666"></i>
+			&nbsp; Add Event
+		</ons-list-item>
 
 		<ons-list-item 
-                ng-click="ons.slidingMenu.toggleMenu();
-                ons.slidingMenu.setMainPage('categories.html')">
+	            ng-click="
+	            navOut.pushPage('myEvents.html', {animation: 'none'} );
+	            menu.toggleMenu();	
+	            "> 
+			<i class="fa fa-gear fa-lg" style="color: #666"></i>
+			&nbsp; My Events
+		</ons-list-item>
+		
+		<ons-list-item 
+	            ng-click="
+	            navOut.pushPage('allEvents.html', {animation: 'none'} );
+	            menu.toggleMenu();	
+	            "> 
+			<i class="fa fa-gear fa-lg" style="color: #666"></i>
+			&nbsp; All Events
+		</ons-list-item>
+		
+		<ons-list-item 
+	            ng-click="
+	            navOut.pushPage('categories.html', {animation: 'none'} );
+	            menu.toggleMenu();	
+	            "> 
 			<i class="fa fa-gear fa-lg" style="color: #666"></i>
 			&nbsp; CATEGORIES
 		</ons-list-item>
+	
 
-        <ons-list-item
-                ng-click="ons.slidingMenu.setMainPage('about.html'); ons.slidingMenu.toggleMenu();">
-            <i class="fa fa-info-circle fa-lg" style="color: #666"></i>
-            &nbsp; About
-        </ons-list-item>
 	</ons-list>
-  </ons-page>
-  
-  <!-- ons.slidingMenu.setMainPage('categories.html')-->
-  
-
-  <ons-page modifier="menu-page">
-   <ons-toolbar modifier="transparent"></ons-toolbar>
-    <ons-list>
-        <ons-list-item
-                ng-click="menu.toggleMenu();
-                navOut.pushPage('feed.html', {animation: 'none'} );
-			    ">
-            <i class="fa fa-home fa-lg" style="color: #666"></i>
-            &nbsp; Feed
-        </ons-list-item>
-
-        <ons-list-item
-                ng-click="menu.toggleMenu();
-                navOut.pushPage('login.html', {animation: 'none'} );
-                ">
-            <i class="fa fa-search fa-lg" style="color: #666"></i>
-            &nbsp; Login
-        </ons-list-item>
-
-		<ons-list-item 
-                ng-click="
-                navOut.pushPage('categories.html', {animation: 'none'} );
-                menu.toggleMenu();	
-                "> 
-			<i class="fa fa-gear fa-lg" style="color: #666"></i>
-			&nbsp; CATEGORIES
-		</ons-list-item>
-
-        <ons-list-item
-                ng-click="
-                navOut.pushPage('about.html', {animation: 'none'} );
-                menu.toggleMenu();">
-            <i class="fa fa-info-circle fa-lg" style="color: #666"></i>
-            &nbsp; About
-        </ons-list-item>
-	</ons-list>
-  </ons-page>
+</ons-page>
 

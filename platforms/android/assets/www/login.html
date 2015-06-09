@@ -1,65 +1,33 @@
 
 <!--<ons-navigator title="Login">-->
-    <ons-page ng-controller="LoginCtrl">
-        <ons-toolbar >
-            <div class="left">
-              <ons-toolbar-button ng-click="menu.toggle()">
-                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
-              </ons-toolbar-button>
-            </div>
-            <div class="right">
-              <ons-toolbar-button ng-click="console.log(navOut.getPages())">
-                <ons-icon icon="ion-gear-a" size="28px" fixed-width="false"></ons-icon>
-              </ons-toolbar-button>
-            </div>
-            <div class="center">Login</div>
-        </ons-toolbar>
+<ons-page ng-controller="LoginCtrl">
+	<ons-toolbar >
+	    <div class="left">
+	      <ons-toolbar-button ng-click="menu.toggle()">
+	        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+	      </ons-toolbar-button>
+	    </div>
+	    <div class="right">
+	      <ons-toolbar-button ng-click="console.log(navOut.getPages())">
+	        <ons-icon icon="ion-gear-a" size="28px" fixed-width="false"></ons-icon>
+	      </ons-toolbar-button>
+	    </div>
+	    <div class="center">Login</div>
+	</ons-toolbar>
         
 
-<body>
-
-<!--
-  <div ng-hide="currentUser">
-    <form ng-show="scenario == 'Sign up'">
-      <h2>Sign up</h2>
-      Email: <input type="email" ng-model="user.email" /><br />
-      Username: <input type="text" ng-model="user.username" /><br />
-      Password: <input type="password" ng-model="user.password" /><br />
-      <button ng-click="signUp(user)">Sign up</button>
-      or <a href="#" ng-click='scenario="Log in"'>Log in</a>
-    </form>
-    
-    <form ng-show="scenario == 'Log in'">
-      <h2>Log in</h2>
-      Username: <input type="text" ng-model="user.username" /><br />
-      Password: <input type="password" ng-model="user.password" /><br />
-      <button ng-click="logIn(user)">Log in</button>
-      or <a href="#" ng-click='scenario="Sign up"'>Sign up</a>
-    </form>
-    <form ng-show="scenario == 'Sign up'">
-      <h2>FB Log in</h2>
-      Username: <input type="text" ng-model="user.username" /><br />
-      Password: <input type="password" ng-model="user.password" /><br />
-      <button ng-click="fblogin()">Log in</button>
-      <fb:login-button show-faces="true" max-rows="1"     size="large"></fb:login-button>
-    </form>
-  </div>
-  
-  <div ng-show="currentUser">
-    <h1>Welcome {{currentUser.get('username')}}</h1>
-    <p> You have been successfully logged in</p>
-    <button ng-click="logOut(user)">Log out</button>
-  </div>-->
-  
-        <div>
-        	
-        	<div ng-if="user.attributes.profilePicture" class="center" style="margin:auto;"><img src="{{user.attributes.profilePicture}}" /></div>
-	       	<div class="center" style="margin:auto;"><button class='btn' ng-click="FB_login()">Connect with Facebook</button></div>
-        	<div class="center" style="margin:auto;"><button class='btn' ng-click="logout()">Logout</button></div>
-        	      <ons-button onclick="navOut.popPage()">Pop</ons-button>
-        	      <ons-button onclick="menu.toggle()">Menu</ons-button>
-
-        </div>
-</body>
+	<body>
+		<div>
+			<div ng-if="user.profilePicture" class="center" style="margin:auto;"><img ng-src="{{user.profilePicture}}" /></div>
+			<div ng-if="user" class="center" style="margin:auto;">{{user.name}}</div>
+		   	<div class="center" style="margin:auto;"><button class='btn' ng-click="FB_login()">Connect with Facebook</button></div>
+			<div class="center" style="margin:auto;"><button class='btn' ng-click="logout()">Logout</button></div>
+			<ons-button onclick="navOut.popPage()">Pop</ons-button>
+			<ons-button onclick="menu.toggle()">Menu</ons-button>
+			<div>Hi{{user.authData}}</div>
+			<div>Pic:{{user.profilePicture}}</div>
+			
+		</div>
+	</body>
 </ons-page>
 <!--</ons-navigator>-->

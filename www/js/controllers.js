@@ -261,7 +261,8 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 
 mediaApp.controller('LoginCtrl', function LoginCtrl($scope, User) {
 
-	
+	$scope.loginStatus = "Status Here";
+       
 	if (!$scope.user) {
 		console.log('user is blank so assigning parse');
 		//$scope.user = Parse.User.current();
@@ -273,7 +274,7 @@ mediaApp.controller('LoginCtrl', function LoginCtrl($scope, User) {
 
 
 	$scope.FB_login = function() {
-		User.logIn();
+		$scope.loginStatus = User.logIn();
 		console.log("Current USer");
 		$scope.user = User.current();
 		//$scope.$apply();
@@ -311,6 +312,11 @@ mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) 
 	var outigoer = User.current();
 	$scope.submitReady = false; 
 	
+	$scope.eventDate = new Date(2013, 9, 22);
+       
+    //$scope.ISOdate = ;
+    //$scope.eventDescription = "A";
+	
 	//var tosave = {'Id':5, 'Category':'Adventure', 'Interest':'Rock Climbing', 'blah':'blah'};
 	//{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}
 	//-d '{"opponents":{"__op":"AddRelation","objects":[{"__type":"Pointer","className":"Player","objectId":"Vx4nudeWn"}]}}' \
@@ -345,8 +351,9 @@ mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) 
 		var eventDesc = $scope.eventDescription;
 		var userArray =  {"__op":"Add", "objects":[{"__type":"Pointer","className":"_User", "objectId":outigoer.objectId }]};
 		var interestRelation = {"__type":"Pointer","className":"Interests", "objectId":$scope.selectedItem.objectId };
-		var tosave = {'Creators':userArray, 'Description':$scope.eventDescription,'Interest': interestRelation}; 
-		//console.log(tosave);
+		var eventDate = {"__type":"Date", "iso":$scope.eventDate.toISOString()};
+		var tosave = {'Creators':userArray, 'Description':$scope.eventDescription,'Interest': interestRelation, 'eventDate':eventDate}; 
+		console.log(tosave);
 		//console.log (eventDesc);
 		
 		var result = RestService.url('Events').post(tosave, function() {
