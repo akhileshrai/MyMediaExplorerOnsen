@@ -38,3 +38,11 @@ Icon
 platforms/*
 *.apk
 *.apk
+*.prop
+*.apk
+*.apk
+platforms/android/ant-build/build.prop
+platforms/android/ant-build/MediaExplorerOnsenApp.ap_.d
+platforms/android/com.phonegap.plugins.facebookconnect/FacebookLib/ant-build/build.prop
+platforms/android/com.phonegap.plugins.facebookconnect/FacebookLib/bin/build.prop
+*.prop
