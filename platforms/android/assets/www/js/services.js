@@ -230,17 +230,19 @@ mediaApp.factory('User', function($q, $resource){
 					
 					console.log('yes this works too');
 					
-					facebookConnectPlugin.api('/me', null, function(response) {
+					facebookConnectPlugin.api('/me?fields=name,picture', null, function(response) {
 						//localStorage.setItem('authData', 'Step 2 Reached'+ JSON.stringify(response));
 						console.log('authData', 'Step 2 Reached'+ JSON.stringify(response));
 						localStorage.setItem('name', response.name);
+						localStorage.setItem('profilePicture', response.picture.data.url);
+
 					}, function(error) {console.log(error);	});
 					
-					facebookConnectPlugin.api('/me/picture', null, function(response) {
+					/*facebookConnectPlugin.api('/me/picture', null, function(response) {
 						//localStorage.setItem('authData', 'Step 3 Reached'+ JSON.stringify(response));
 						console.log('authData', 'Step 3 Reached'+ JSON.stringify(response));
 						localStorage.setItem('profilePicture', response.data.url);
-					}, function(error) {console.log(error);});
+					}, function(error) {console.log(error);});*/
 					
 					setTimeout(function() {
 						navOut.popPage();   

@@ -249,11 +249,13 @@ C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\asset
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\_where-is-www.txt \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\about.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\aboutNav.html \
+C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\allEvents.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\categories.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\config.xml \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\cordova.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\cordova_plugins.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\css \
+C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\eventCreator.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\feed.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\home.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\homeNav.html \
@@ -265,6 +267,7 @@ C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\asset
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\login.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\menu.html \
+C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\myEvents.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\playModal.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\playModalNav.html \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\plugins \
