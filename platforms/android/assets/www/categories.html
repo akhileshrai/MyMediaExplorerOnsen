@@ -19,6 +19,7 @@
         </ons-toolbar>
 
     <body ng-show="loggedIn">
+    	<div ng-show="netAlert" class="alertBox"> Your Internet is Offside :/</div>
     	      <ons-button onclick="navOut.pushPage('login.html')">Push</ons-button>
         <ons-list style="margin-top: 0px;">
             <ons-list-item ng-repeat="(value,categ) in options" >
@@ -29,7 +30,7 @@
                         <ons-list-item ng-repeat="interest in categ" >
                             <span style="color: #666">{{interest.Interest}}</span>
                               <label class="switch">
-							      <input ng-model="interest.isChecked" type="checkbox" class="switch__input" checked>
+							      <input ng-model="interest.isChecked" type="checkbox" class="switch__input" ng-click="submitChanges()" checked>
 							            <div class="switch__toggle"></div>
 							  </label>
                             
@@ -39,8 +40,8 @@
                 </ons-row>
             </ons-list-item>
         </ons-list>
-         <ons-button ng-click="submitChanges()">Changes status</ons-button>
-         <div>{{user}}</div>
+         <!--<ons-button ng-click="submitChanges()">Changes status</ons-button>
+         <div>{{user}}</div>-->
     </body>
 </ons-page>
 

@@ -14,27 +14,55 @@
     </ons-toolbar>
     
     <body >
+    	<div ng-show="netAlert" class="alertBox"> Your Internet is Offside :/</div>
+    	
     	<div ng-show="submitReady">
 		
-			<select ng-model="selectedItem" ng-options="interest.Interest for interest in interests track by interest.objectId"></select>
+			
 	
 	    	<form name="createEventForm">
-	    		<label>Event brief:	
+	    		<H3>Fill this:</H3>
+	    		
+	    		<div class="inputLabel"><label>Interest:
+		    		<select name="selectedItem" ng-model="selectedItem" ng-options="interest.Interest for interest in interests track by interest.objectId" required>
+					      <option value="">Select Interest</option> 
+					</select>
+				</label></div>
+				
+				<div class="inputLabel"><label>Event brief:	
 	    			<input class="text" name="eventDescription" ng-model="eventDescription" ng-minlength="3" ng-maxlength="10" required></input> 
-	    		</label>
+	    		</label></div>
+
+	    		<div class="inputLabel"><label for="eventDate">Pick a date:
+					<input type="date" id="eventDate" name="inputDate" ng-model="eventDate" placeholder="yyyy-MM-dd" min="{{minDate | date:'yyyy-MM-dd'}}" max="2015-12-31" required />
+					 <div role="alert">
+						 <span class="error" ng-show="createEventForm.inputDate.$error.required">
+						 Required!</span>
+						 <span class="error" ng-show="createEventForm.inputDate.$error.date">
+						 Not a valid date!</span>
+					</div>
+				</label></div>
+					
+				<div class="inputLabel"><label># Players Needed:	
+	    			<input class="number" name="usersNeeded" ng-model="usersNeeded" min="1" max="22" required></input> 
+	    		</label></div>
 	    		
+	    		<div ng-show="selectedItem.Interest" class="optionalInput animate-show"> 
+
+		    		<H3>Optionally Fill {{selectedItem.Interest}} related stuff:</H3>
+	
+		    		<div class="inputLabel"><label># Teams Playing:	
+		    			<input class="number" name="groupsNeeded" ng-model="groupsNeeded" min="1" max="22"></input> 
+		    		</label></div>
+	
+		    		<div class="skillLevel"><label>Expected Skill Level (1-10):	
+		    			<input class="number" name="groupsNeeded" ng-model="groupsNeeded" min="1" max="10"></input> 
+		    		</label></div>
+	    		</div>
 	    		
-	    		<label for="eventDate">Pick a date in 2013:</label>
-				<input type="date" id="eventDate" name="inputDate" ng-model="eventDate"
-				   placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
-				 <div role="alert">
-					 <span class="error" ng-show="createEventForm.inputDate.$error.required">
-					 Required!</span>
-					 <span class="error" ng-show="createEventForm.inputDate.$error.date">
-					 Not a valid date!</span>
-				</div>
-	    		<input type="button"  ng-disabled="createEventForm.eventDescription.$invalid || createEventForm.inputDate.$invalid" ng-click="createEvent()" />
-	    		
+	    		<div>
+	    			<input type="button" value="Create Event!" ng-disabled="createEventForm.eventDescription.$invalid || createEventForm.inputDate.$invalid" ng-click="createEvent()" />
+	    		</div>
 	    	</form>
 	    	
 	    	

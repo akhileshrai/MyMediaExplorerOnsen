@@ -203,14 +203,28 @@ mediaApp.factory('User', function($q, $resource){
 			});*/
 			 
 			var fbLoginSuccess = function(response) {
+				console.log('fbsuccess', response);
 				if (!response.authResponse) {
 					fbLoginError("Cannot find the authResponse");
 					//outigoer.authdata="cannot find the authresponse";
 					return;
 				}
+
+				facebookConnectPlugin.api('/me?fields=name,picture', null, function(response) {
+						//localStorage.setItem('authData', 'Step 2 Reached'+ JSON.stringify(response));
+						console.log('authData', 'Step 2 Reached'+ JSON.stringify(response));
+						outigoer.name = response.name;
+						outigoer.profilePicture = response.picture.data.url;
+						localStorage.setItem('name', outigoer.name);
+						localStorage.setItem('profilePicture', outigoer.profilePicture);
+
+					}, function(error) {console.log(error);	});
+
 				var expDate = new Date(new Date().getTime() + response.authResponse.expiresIn * 1000).toISOString();
 		        
 		        var authData = new String;
+
+
 		
 				authData =	{
 								authData: { 
@@ -220,23 +234,29 @@ mediaApp.factory('User', function($q, $resource){
 										expiration_date : expDate
 									}
 								},
-								userPrefs: ["hi"]
-							};
+						};
+							
+				
+				//Get name and profile picture
+
 				var loggedInRest = self.url('',null,null,null).post(authData, function(response){ 
+					outigoer.sessionToken = response.sessionToken;
+					outigoer.objectId = response.objectId;
 					localStorage.setItem('sessionToken', response.sessionToken);
 					localStorage.setItem('objectId', response.objectId);
-					localStorage.setItem('authData', 'Step 1 Reached');
-					
-					
+				
 					console.log('yes this works too');
 					
+					/*
 					facebookConnectPlugin.api('/me?fields=name,picture', null, function(response) {
 						//localStorage.setItem('authData', 'Step 2 Reached'+ JSON.stringify(response));
 						console.log('authData', 'Step 2 Reached'+ JSON.stringify(response));
-						localStorage.setItem('name', response.name);
-						localStorage.setItem('profilePicture', response.picture.data.url);
+						outigoer.name = response.name;
+						outigoer.profilePicture = response.picture.data.url;
+						localStorage.setItem('name', outigoer.name);
+						localStorage.setItem('profilePicture', outigoer.profilePicture);
 
-					}, function(error) {console.log(error);	});
+					}, function(error) {console.log(error);	});*/
 					
 					/*facebookConnectPlugin.api('/me/picture', null, function(response) {
 						//localStorage.setItem('authData', 'Step 3 Reached'+ JSON.stringify(response));
@@ -251,21 +271,39 @@ mediaApp.factory('User', function($q, $resource){
 					console.log(response);
 				});
 				
+				loggedInRest.$promise.then( function(value) {
+					//var self = this;
+
+					var fbData = new String();
+					fbData = {name: outigoer.name, profilePicture: outigoer.profilePicture};
+								
+						
+					var userData = self.url(outigoer.objectId, null, null, null).put(fbData, function(response) {
+						console.log ("updated user");
+					});
+				});
+				
 			
 				//fbLogged.resolve(loggedInRest);
 				fbLoginSuccess = null;
 				
 			
 			};
+			
 		
 			var fbLoginError = function(error) {
 				localStorage.setItem('authData', 'fbLogin Error');
 				//fbLogged.reject(error);
 				return error;
 			};
-			facebookConnectPlugin.login(['email'], fbLoginSuccess, fbLoginError);
-		
-					
+			try {
+				facebookConnectPlugin.login(['email'], fbLoginSuccess, fbLoginError);
+		   	}
+		    catch (e) {
+		    	return "Facebook couldn't connect";
+		    };
+		    //console.log(fbLog);
+			
 		}
 				
 	};

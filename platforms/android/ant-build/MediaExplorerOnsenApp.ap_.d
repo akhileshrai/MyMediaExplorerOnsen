@@ -287,6 +287,7 @@ C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\asset
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\images\ico_swipe_right_s.png \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\images\itunes.png \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\img\logo.png \
+C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\img\Outdoor1.jpg \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\app.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\controllers.js \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\js\directives.js \

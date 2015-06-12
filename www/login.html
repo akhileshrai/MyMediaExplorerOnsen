@@ -1,6 +1,7 @@
 
 <!--<ons-navigator title="Login">-->
 <ons-page ng-controller="LoginCtrl">
+<div  id="loginBody" >
 	<ons-toolbar >
 	    <div class="left">
 	      <ons-toolbar-button ng-click="menu.toggle()">
@@ -17,17 +18,19 @@
         
 
 	<body>
-		<div>
-			<div ng-if="user.profilePicture" class="center" style="margin:auto;"><img ng-src="{{user.profilePicture}}" /></div>
+    	<div ng-show="loginStatus" class="alertBox"> {{loginStatus}} :/</div>
+		<div >
+			<div class = "profilePicture" ng-if="user.profilePicture" class="center" style="margin:auto;"><img ng-src="{{user.profilePicture}}" /></div>
 			<div ng-if="user" class="center" style="margin:auto;">{{user.name}}</div>
-		   	<div class="center" style="margin:auto;"><button class='btn' ng-click="FB_login()">Connect with Facebook</button></div>
-			<div class="center" style="margin:auto;"><button class='btn' ng-click="logout()">Logout</button></div>
-			<ons-button onclick="navOut.popPage()">Pop</ons-button>
+		   	<div class="buttonHolder" ng-hide="user"><button class="btn loginButtons" ng-click="FB_login()">Connect with Facebook</button></div>
+			<div class="buttonHolder" ng-show="user" ><button class="btn loginButtons" ng-click="logout()">Logout</button></div>
+			<!--<ons-button onclick="navOut.popPage()">Pop</ons-button>
 			<ons-button onclick="menu.toggle()">Menu</ons-button>
 			<div>Hi{{user.authData}}</div>
-			<div>Pic:{{user.profilePicture}}</div>
+			<div>Pic:{{user.profilePicture}}</div>-->
 			
 		</div>
 	</body>
+	</div>
 </ons-page>
 <!--</ons-navigator>-->

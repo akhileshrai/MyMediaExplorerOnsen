@@ -1,9 +1,10 @@
 // This is a JavaScript file
 window.fbAsyncInit = function() {
-        Parse.FacebookUtils.init({
+        FB.init({
           appId      : '353205054847621',
           xfbml      : true,
-          version    : 'v2.1'
+          version    : 'v2.1',
+          status     : false
         });
 
       (function(d, s, id){
@@ -16,4 +17,4 @@ window.fbAsyncInit = function() {
  };
 
 
-Parse.initialize("ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire", "xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous");
+//Parse.initialize("ESYJJY7x9hxzJ4s8U3n51EqZHTGqk4OSeasZ3Ire", "xLxyiGvPwxP0Mad2FTFH3Nkztju3PglxEB5kcous");

@@ -1,0 +1,46 @@
+.inputLabel {
+	padding:4px;
+}
+.optionalInput .inputLabel  {
+	color:#808080;
+}
+.alertBox {
+    background: none repeat scroll 0 0 #d64;
+    color: #e4e4e4;
+    padding: 2px;
+    text-align: center;
+}
+.loginButtons {
+	width:80%;
+	background:#4F81BB;
+    border: 0 none;
+    font-size: 1.2em;
+    padding: 6px;   
+
+}
+
+.buttonHolder {
+	text-align: center; 
+	margin:6px;
+}
+
+#loginBody {
+    background: url("../img/Outdoor1.jpg") no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	height: 100%;
+}
+.center {
+	text-align:center;
+	margin:auto;
+	padding:16px;
+}
+
+.profilePicture {
+	padding: 20px;
+    padding: 30px;
+    text-align: center;
+}
+

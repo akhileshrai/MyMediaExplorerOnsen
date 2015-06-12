@@ -209,6 +209,10 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
     	//console.log(restCategs);
     	
   	});
+  	console.log(restCategs);
+  	restCategs.$promise.catch(function() {
+  		console.log('hi catch!');
+  	});
   	
   	restCategs.$promise.then (function (value){
   		
@@ -217,7 +221,10 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 	  			menuDisplay(restCategs.results, userPrefs.userPrefs);
 	  		});
   				
-  		});
+  		}, function (value) {
+  			//alert('Your connection is offside');
+  			$scope.netAlert = 'Check your connection!';
+  	});
   	
   	
   	$scope.submitChanges = function() {
@@ -244,6 +251,9 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
   		
   		var userPref = User.url($scope.user.objectId, null,null,null).put(parsePrefs, function() {
   			console.log(userPref);
+  		}, function (value) {
+  			//alert('Your connection is offside');
+  			$scope.netAlert = 'Check your connection!';
   		});
   		
 
@@ -261,7 +271,7 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 
 mediaApp.controller('LoginCtrl', function LoginCtrl($scope, User) {
 
-	$scope.loginStatus = "Status Here";
+	$scope.loginStatus = false;
        
 	if (!$scope.user) {
 		console.log('user is blank so assigning parse');
@@ -310,10 +320,16 @@ mediaApp.controller('restCtrl', function restCtrl($scope, RestService) {
 mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) {
 	console.log('Create Controller Entered');
 	var outigoer = User.current();
-	$scope.submitReady = false; 
 	
-	$scope.eventDate = new Date(2013, 9, 22);
-       
+	
+	//Initialise all inputs
+	$scope.eventDate = new Date(2015, 9, 22);
+	$scope.usersNeeded = 1;
+	$scope.groupsNeeded = 1;
+	$scope.submitReady = false; 
+	$scope.minDate = new Date();
+	console.log($scope.minDate.toDateString);
+       	
     //$scope.ISOdate = ;
     //$scope.eventDescription = "A";
 	
@@ -340,7 +356,11 @@ mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) 
 		$scope.interests = restCategs.results;
 		$scope.submitReady = true;
 		//$scope.$apply();
-  	});
+  	}, function (value) {
+  			//alert('Your connection is offside');
+  			$scope.netAlert = 'Check your connection!';
+  		}
+  	);
 	
 	
 	$scope.selectedItem = "Sports";
@@ -352,7 +372,7 @@ mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) 
 		var userArray =  {"__op":"Add", "objects":[{"__type":"Pointer","className":"_User", "objectId":outigoer.objectId }]};
 		var interestRelation = {"__type":"Pointer","className":"Interests", "objectId":$scope.selectedItem.objectId };
 		var eventDate = {"__type":"Date", "iso":$scope.eventDate.toISOString()};
-		var tosave = {'Creators':userArray, 'Description':$scope.eventDescription,'Interest': interestRelation, 'eventDate':eventDate}; 
+		var tosave = {'Creators':userArray, 'Description':$scope.eventDescription,'Interest': interestRelation, 'eventDate':eventDate, 'usersNeeded':$scope.usersNeeded, 'groupsNeeded':$scope.groupsNeeded}; 
 		console.log(tosave);
 		//console.log (eventDesc);
 		
@@ -391,7 +411,11 @@ mediaApp.controller('myEvents', function restCtrl($scope, RestService, User) {
     	console.log(result);
     	$scope.myEvents = result.results;
     	
-	});	
+	}, function (value) {
+  			//alert('Your connection is offside');
+  			$scope.netAlert = 'Check your connection!';
+  		}
+	);	
 	
 	
 });
@@ -407,6 +431,9 @@ mediaApp.controller('allEvents', function restCtrl($scope, RestService, User) {
 	var userPrefs = User.url($scope.user.objectId, null,null,'userPrefs').get({}, function() {
 			//console.log(userPrefs, restCategs);
   			//menuDisplay(restCategs.results, userPrefs.userPrefs);
+  		}, function (value) {
+  			//alert('Your connection is offside');
+  			$scope.netAlert = 'Check your connection!';
   		});
 			
 	
@@ -439,7 +466,10 @@ mediaApp.controller('allEvents', function restCtrl($scope, RestService, User) {
 	    	console.log(result);
 	    	$scope.myEvents = result.results;
 	    	
-		});	
+		}, function (value) {
+  			//alert('Your connection is offside');
+  			$scope.netAlert = 'Check your connection!';
+  		});	
 	
 	});
 });
