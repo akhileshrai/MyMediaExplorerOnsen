@@ -152,8 +152,6 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
 
 
 	var menuDisplay =	function(results, userInterests) {
-		
-			console.log(results);
 			$scope.resultQuery = 'Results length:' + results.length;
 			$scope.interests = results;
 			var categcount = -1;
@@ -216,10 +214,17 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
   	
   	restCategs.$promise.then (function (value){
   		
-	  		var userPrefs = User.url($scope.user.objectId, null,null,'userPrefs').get({}, function() {
-	  			console.log(userPrefs, restCategs);
-	  			menuDisplay(restCategs.results, userPrefs.userPrefs);
+	  		var userPrefs = User.url($scope.user.objectId, null,'userPrefs','userPrefs.Interest').get({}, function() {
+	  			var interestArray = [];
+	  			for (var i=0; i<userPrefs.userPrefs.length; i++){
+	  				interestArray.push(userPrefs.userPrefs[i].objectId);
+	  			} 
+	  			menuDisplay(restCategs.results, interestArray);
 	  		});
+	
+	  		
+	  		
+	  		
   				
   		}, function (value) {
   			//alert('Your connection is offside');
@@ -231,6 +236,8 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
   		console.log($scope.options);
   		var options = $scope.options;
   		var userInterestsChanged = [];
+  		var interestArray = [];
+  		
   		for (var categIndex in options) {
   			
   			var interestObject = options[categIndex];
@@ -238,6 +245,8 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
   				var interestNew = interestObject [interestIndex];
   				if (interestNew.isChecked) {
   					userInterestsChanged.push(interestNew.objectId);
+					interestArray.push({"__type":"Pointer","className":"Interests", "objectId":interestNew.objectId});
+
   				}
   				
   			}
@@ -245,11 +254,18 @@ mediaApp.controller('Categories', function($scope, User, RestService) {
   		
   		}
   		
-  		var parsePrefs = {"userPrefs":userInterestsChanged};
+  		console.log(interestArray);
+  		//var parsePrefs = {"userPrefs":userInterestsChanged};
+
+		var userArray =  {"__op":"Add", "objects":interestArray};
+
+		//var interestRelation = {"__type":"Pointer","className":"Interests", "objectId":$scope.selectedItem.objectId };
+		//var eventDate = {"__type":"Date", "iso":$scope.eventDate.toISOString()};
+		var prefsToSave = {'userPrefs':interestArray}; 
 
   		
   		
-  		var userPref = User.url($scope.user.objectId, null,null,null).put(parsePrefs, function() {
+  		var userPref = User.url($scope.user.objectId, null,null,null).put(prefsToSave, function() {
   			console.log(userPref);
   		}, function (value) {
   			//alert('Your connection is offside');
@@ -339,7 +355,6 @@ mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) 
 	// Creator (r),  Description, Interest (R), Location, Map, Type, eventDate, 
 	//var userRelation =  {"__op":"AddRelation", "objects":[{"__type":"Pointer","className":"_User", "objectId":"0LxcyWcbvv" }]};
 	
-	var keys = 'Interest,Category';
 	
 	Array.prototype.unique = function() {
 	    var unique = [];
@@ -351,9 +366,10 @@ mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) 
 	    return unique;
 	};
 	
-	
+	var keys = 'Interest,Category';
 	var restCategs = RestService.url('Interests',null,null,keys).get({ id: $scope.id }, function() {
-		$scope.interests = restCategs.results;
+		//$scope.interests = restCategs.results;
+		console.log(restCategs.results);
 		$scope.submitReady = true;
 		//$scope.$apply();
   	}, function (value) {
@@ -361,6 +377,16 @@ mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) 
   			$scope.netAlert = 'Check your connection!';
   		}
   	);
+  	
+  	var userPrefs = User.url(outigoer.objectId, null,'userPrefs','userPrefs.Interest').get({}, function() {
+			//console.log(userPrefs, restCategs);
+  			//menuDisplay(restCategs.results, userPrefs.userPrefs);
+  			$scope.interests = userPrefs.userPrefs;
+  			console.log(userPrefs);	
+  		}, function (value) {
+  			//alert('Your connection is offside');
+  			$scope.netAlert = 'Check your connection!';
+  		});
 	
 	
 	$scope.selectedItem = "Sports";
@@ -372,7 +398,7 @@ mediaApp.controller('createEvent', function restCtrl($scope, RestService, User) 
 		var userArray =  {"__op":"Add", "objects":[{"__type":"Pointer","className":"_User", "objectId":outigoer.objectId }]};
 		var interestRelation = {"__type":"Pointer","className":"Interests", "objectId":$scope.selectedItem.objectId };
 		var eventDate = {"__type":"Date", "iso":$scope.eventDate.toISOString()};
-		var tosave = {'Creators':userArray, 'Description':$scope.eventDescription,'Interest': interestRelation, 'eventDate':eventDate, 'usersNeeded':$scope.usersNeeded, 'groupsNeeded':$scope.groupsNeeded}; 
+		var tosave = {'Creators':userArray, 'Description':$scope.eventDescription,'Interest': interestRelation, 'eventDate':eventDate, 'usersNeeded':parseInt($scope.usersNeeded), 'groupsNeeded':parseInt($scope.groupsNeeded)}; 
 		console.log(tosave);
 		//console.log (eventDesc);
 		
@@ -428,7 +454,7 @@ mediaApp.controller('allEvents', function restCtrl($scope, RestService, User) {
 	
 
 		
-	var userPrefs = User.url($scope.user.objectId, null,null,'userPrefs').get({}, function() {
+	var userPrefs = User.url($scope.user.objectId, null,'userPrefs','userPrefs.Interest').get({}, function() {
 			//console.log(userPrefs, restCategs);
   			//menuDisplay(restCategs.results, userPrefs.userPrefs);
   		}, function (value) {
@@ -441,10 +467,10 @@ mediaApp.controller('allEvents', function restCtrl($scope, RestService, User) {
 	//var tosave = {'Creator':userRelation, 'Description':'This is the event','Interest': interestRelation}; 
 	userPrefs.$promise.then (function (result){
 		var userPrefs = result.userPrefs;
-		var wherePrefs = [];
+		var wherePrefs = []; //userPrefs;
 		
 		for (var userPref in userPrefs) {
-			var pointerPref = {"__type":"Pointer","className":"Interests","objectId":userPrefs[userPref]};
+			var pointerPref = {"__type":"Pointer","className":"Interests","objectId":userPrefs[userPref].objectId};
 			//pointerPref.objectId = userPrefs[userPref];
 			//wherePrefs.push(pointerPref);
 			wherePrefs[userPref] = pointerPref;

@@ -23,14 +23,14 @@
 	    	<form name="createEventForm">
 	    		<H3>Fill this:</H3>
 	    		
-	    		<div class="inputLabel"><label>Interest:
+	    		<div class="inputLabel"><label>
 		    		<select name="selectedItem" ng-model="selectedItem" ng-options="interest.Interest for interest in interests track by interest.objectId" required>
 					      <option value="">Select Interest</option> 
 					</select>
 				</label></div>
 				
-				<div class="inputLabel"><label>Event brief:	
-	    			<input class="text" name="eventDescription" ng-model="eventDescription" ng-minlength="3" ng-maxlength="10" required></input> 
+				<div class="inputLabel"><label>	
+	    			<input class="text" name="eventDescription" ng-model="eventDescription" ng-minlength="3" ng-maxlength="10" placeholder="Event Brief" required></input> 
 	    		</label></div>
 
 	    		<div class="inputLabel"><label for="eventDate">Pick a date:
