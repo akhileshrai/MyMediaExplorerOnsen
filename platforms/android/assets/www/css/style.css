@@ -24,8 +24,8 @@
 	margin:6px;
 }
 
-#loginBody {
-    background: url("../img/Outdoor1.jpg") no-repeat center center fixed; 
+.onsen-sliding-menu__main .ons-page-inner {
+    background: url("../img/Outdoor1.jpg") no-repeat center center fixed !important; 
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -34,8 +34,6 @@
 }
 .center {
 	text-align:center;
-	margin:auto;
-	padding:16px;
 }
 
 .profilePicture {
@@ -44,3 +42,26 @@
     text-align: center;
 }
 
+#toolbar {
+	background:#88ee88;	
+}
+
+body:after{
+   content: url("../img/Outdoor1.jpg") display:none;
+}
+
+.eventList {
+	margin: 2%;
+}
+
+.switch {
+    float: right;
+    margin: 0.3em;
+}
+
+.createEvent{
+	background: none repeat scroll 0 0 #fff;
+    margin: 2%;
+    opacity: 0.92;
+    padding: 15px;
+}

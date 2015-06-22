@@ -18,8 +18,7 @@
     	
     	<div ng-show="submitReady">
 		
-			
-	
+		<div class="createEvent">
 	    	<form name="createEventForm">
 	    		<H3>Fill this:</H3>
 	    		
@@ -64,6 +63,7 @@
 	    			<input type="button" value="Create Event!" ng-disabled="createEventForm.eventDescription.$invalid || createEventForm.inputDate.$invalid" ng-click="createEvent()" />
 	    		</div>
 	    	</form>
+	    </div> 
 	    	
 	    	
  <!--
@@ -71,9 +71,9 @@
     <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
     <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
     <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
-    <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>-->
-</form>{{ISOdate}}
+    <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
+</form>{{ISOdate}}-->
 
-    	</div>
+    </div> <!--Close submit Ready-->
     </body>
 </ons-page>

@@ -15,7 +15,7 @@
     
     <body> 
     	<div ng-show="netAlert" class="alertBox"> Your Internet is Offside :/</div>
-    	<ons-list style="margin-top: 0px;">
+    	<ons-list class="eventList">
 	    	<ons-list-item ng-repeat="event in myEvents"><h3>{{event.Description}}</h3>
 	    		<div ng-repeat="creator in event.Creators">{{creator.name}}</div>
 	    		<div>{{event.Interest.Category}}>>{{event.Interest.Interest}}</div>

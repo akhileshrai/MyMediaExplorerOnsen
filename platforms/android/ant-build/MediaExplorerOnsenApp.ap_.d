@@ -312,6 +312,7 @@ C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\asset
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\onsen\css\onsen-css-components-default.css \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\onsen\css\onsen-css-components-purple-theme.css \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\onsen\css\onsen-css-components-sunshine-theme.css \
+C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\onsen\css\onsen-css-components-themed.css \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\onsen\css\onsen-css-components.css \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\onsen\css\onsenui.css \
 C:\Users\akhil_000\Documents\GitHub\MyMediaExplorerOnsen\platforms\android\assets\www\lib\onsen\css\font_awesome\css \

@@ -20,13 +20,14 @@
 
     <body ng-show="loggedIn">
     	<div ng-show="netAlert" class="alertBox"> Your Internet is Offside :/</div>
-    	      <ons-button onclick="navOut.pushPage('login.html')">Push</ons-button>
-        <ons-list style="margin-top: 0px;">
-            <ons-list-item ng-repeat="(value,categ) in options" >
+    	<!--
+    	      <ons-button onclick="navOut.pushPage('login.html')">Push</ons-button>-->
+        <div class="eventList">
+            <div ng-repeat="(value,categ) in options" >
                 <!--<ons-list-header ng-if="header!=interest.get('Category')">{{header = interest.get('Category')}}</ons-list-header>-->
-                <ons-row>
+ 
                     <ons-list style="margin-top: 0px;">
-                        <ons-list-title class="col">{{value}}</ons-list-title>
+                        <ons-list-header class="col">{{value}}</ons-list-header>
                         <ons-list-item ng-repeat="interest in categ" >
                             <span style="color: #666">{{interest.Interest}}</span>
                               <label class="switch">
@@ -37,9 +38,9 @@
                             
                         </ons-list-item>
                     </ons-list>	
-                </ons-row>
-            </ons-list-item>
-        </ons-list>
+
+            </div>
+        </div>
          <!--<ons-button ng-click="submitChanges()">Changes status</ons-button>
          <div>{{user}}</div>-->
     </body>
